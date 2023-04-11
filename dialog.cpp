@@ -12,3 +12,9 @@ Dialog::~Dialog()
 {
     delete ui;
 }
+
+void Dialog::on_pushButton_clicked()
+{
+    QString selectedValue = ui->algoritam->currentText();
+    qDebug()<<selectedValue;
+}
