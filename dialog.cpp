@@ -15,6 +15,8 @@ Dialog::~Dialog()
 
 void Dialog::on_pushButton_clicked()
 {
-    QString selectedValue = ui->algoritam->currentText();
-    qDebug()<<selectedValue;
+    QString algoritam = ui->algoritam->currentText();
+    qDebug()<<algoritam;
+    QString brojProcesa = ui->brojProcesa->currentText();
+    qDebug()<<brojProcesa;
 }
