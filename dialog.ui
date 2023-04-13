@@ -47,7 +47,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QSpinBox" name="spinBox"/>
+     <widget class="QSpinBox" name="dolazakP1"/>
     </item>
     <item row="0" column="2">
      <widget class="QLabel" name="label_2">
@@ -60,7 +60,11 @@
      </widget>
     </item>
     <item row="2" column="5">
-     <widget class="QSpinBox" name="spinBox_13"/>
+     <widget class="QSpinBox" name="brojCiklusaP5">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="0" column="3">
      <widget class="QLabel" name="label_3">
@@ -93,49 +97,49 @@
      </widget>
     </item>
     <item row="4" column="3">
-     <widget class="QSpinBox" name="spinBox_17">
+     <widget class="QSpinBox" name="prioritetP3">
       <property name="enabled">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item row="4" column="2">
-     <widget class="QSpinBox" name="spinBox_16">
+     <widget class="QSpinBox" name="prioritetP2">
       <property name="enabled">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item row="4" column="1">
-     <widget class="QSpinBox" name="spinBox_15">
+     <widget class="QSpinBox" name="prioritetP1">
       <property name="enabled">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item row="4" column="7">
-     <widget class="QSpinBox" name="spinBox_21">
+     <widget class="QSpinBox" name="prioritetP7">
       <property name="enabled">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item row="4" column="5">
-     <widget class="QSpinBox" name="spinBox_19">
+     <widget class="QSpinBox" name="prioritetP5">
       <property name="enabled">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item row="4" column="6">
-     <widget class="QSpinBox" name="spinBox_20">
+     <widget class="QSpinBox" name="prioritetP6">
       <property name="enabled">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item row="4" column="4">
-     <widget class="QSpinBox" name="spinBox_18">
+     <widget class="QSpinBox" name="prioritetP4">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -162,34 +166,70 @@
      </widget>
     </item>
     <item row="2" column="3">
-     <widget class="QSpinBox" name="spinBox_12"/>
+     <widget class="QSpinBox" name="brojCiklusaP3">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QSpinBox" name="spinBox_10"/>
+     <widget class="QSpinBox" name="brojCiklusaP1"/>
     </item>
     <item row="2" column="2">
-     <widget class="QSpinBox" name="spinBox_11"/>
+     <widget class="QSpinBox" name="brojCiklusaP2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="1" column="2">
-     <widget class="QSpinBox" name="spinBox_2"/>
+     <widget class="QSpinBox" name="dolazakP2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="1" column="3">
-     <widget class="QSpinBox" name="spinBox_3"/>
+     <widget class="QSpinBox" name="dolazakP3">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="2" column="7">
-     <widget class="QSpinBox" name="spinBox_14"/>
+     <widget class="QSpinBox" name="brojCiklusaP7">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="1" column="4">
-     <widget class="QSpinBox" name="spinBox_4"/>
+     <widget class="QSpinBox" name="dolazakP4">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="1" column="5">
-     <widget class="QSpinBox" name="spinBox_5"/>
+     <widget class="QSpinBox" name="dolazakP5">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="1" column="6">
-     <widget class="QSpinBox" name="spinBox_6"/>
+     <widget class="QSpinBox" name="dolazakP6">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="1" column="7">
-     <widget class="QSpinBox" name="spinBox_7"/>
+     <widget class="QSpinBox" name="dolazakP7">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="0" column="1">
      <widget class="QLabel" name="label">
@@ -202,10 +242,18 @@
      </widget>
     </item>
     <item row="2" column="4">
-     <widget class="QSpinBox" name="spinBox_8"/>
+     <widget class="QSpinBox" name="brojCiklusaP4">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="2" column="6">
-     <widget class="QSpinBox" name="spinBox_9"/>
+     <widget class="QSpinBox" name="brojCiklusaP6">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_9">
@@ -248,7 +296,7 @@
      <x>20</x>
      <y>10</y>
      <width>311</width>
-     <height>99</height>
+     <height>101</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
@@ -367,12 +415,6 @@
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <zorder>gridLayoutWidget</zorder>
-  <zorder>pushButton</zorder>
-  <zorder>graphicsView</zorder>
-  <zorder>label_8</zorder>
-  <zorder>gridLayoutWidget_2</zorder>
-  <zorder>horizontalSlider</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
