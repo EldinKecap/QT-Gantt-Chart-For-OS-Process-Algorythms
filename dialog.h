@@ -7,6 +7,9 @@
 #include <QVector>
 #include <QSpinBox>
 #include <QGraphicsScene>
+#include <QGraphicsRectItem>
+#include <QGraphicsLineItem>
+
 
 namespace Ui {
 class Dialog;
@@ -31,9 +34,14 @@ private slots:
 private:
     Ui::Dialog *ui;
     QGraphicsScene *scene;
+    QGraphicsRectItem *rect;
+
     QSpinBox* prioritetSpinBoxes[7];
     QSpinBox* brojCiklusaSpinBoxes[7];
     QSpinBox* dolazakSpinBoxes[7];
+
+
+    void putSpinBoxesIntoArrays();
 };
 
 #endif // DIALOG_H
