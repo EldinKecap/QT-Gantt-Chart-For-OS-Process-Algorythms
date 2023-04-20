@@ -50,18 +50,25 @@ void Dialog::disableSpinBoxesBasedOnSelectedAmount(int numOfProcesses)
 
 void Dialog::on_pushButton_clicked()
 {
+    scene->clear();
+//    Helping rect
+//    QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,40,300);
+//    rect->setPos(5,50);
+//    scene->addItem(rect);
+
+    this->drawAxis();
     QString algoritam = ui->algoritam->currentText();
     qDebug()<<algoritam;
     QString brojProcesa = ui->brojProcesa->currentText();
     qDebug()<<brojProcesa;
-    QFont font("Helvetica", 15);
-
-    QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem("P" + brojProcesa);
-    procesAxisLabel->setPos(10, (300/(brojProcesa.toInt()+1)) + 50);
+    QFont font("Helvetica", 13);
+    for(int i = 1; i <= brojProcesa.toInt(); i++ ){
+    QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem("P" + QString::number(i));
+    procesAxisLabel->setPos(10, (300/(brojProcesa.toInt()+1))*i + 35);
     procesAxisLabel->setFont(font);
     procesAxisLabel->setDefaultTextColor(Qt::blue);
     scene->addItem(procesAxisLabel);
-
+    }
 }
 
 void Dialog::on_brojProcesa_activated(const QString &brojProcesa)
