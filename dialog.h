@@ -42,6 +42,7 @@ private:
 
 
     void putSpinBoxesIntoArrays();
+    void drawAxis();
 };
 
 #endif // DIALOG_H

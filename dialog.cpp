@@ -14,32 +14,11 @@ Dialog::Dialog(QWidget *parent) :
     ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     this->putSpinBoxesIntoArrays();
+    this->drawAxis();
 
-    QPen pen(Qt::blue);
-    QFont font("Helvetica", 15);
-    pen.setWidth(2);
-
-    QGraphicsLineItem* XLine = new QGraphicsLineItem(0,370, 750, 370);
-    QGraphicsLineItem* YLine = new QGraphicsLineItem(50,10, 50, 410);
-    QGraphicsLineItem* YLineArrowLeft = new QGraphicsLineItem(50,10, 30, 40);
-    QGraphicsLineItem* YLineArrowRight = new QGraphicsLineItem(50,10, 70, 40);
-    XLine->setPen(pen);
-    YLine->setPen(pen);
-    YLineArrowLeft->setPen(pen);
-    YLineArrowRight->setPen(pen);
-
-    QGraphicsTextItem* YText = new QGraphicsTextItem("Procesi");
-    YText->setFont(font);
-    YText->setDefaultTextColor(Qt::blue);
-    YText->setPos(80,10);
-
-    scene->addItem(XLine);
-    scene->addItem(YLine);
-    scene->addItem(YLineArrowLeft);
-    scene->addItem(YLineArrowRight);
-
-    scene->addItem(YText);
-
+    QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,40,300);
+    rect->setPos(5,50);
+    scene->addItem(rect);
 
 }
 
@@ -75,8 +54,13 @@ void Dialog::on_pushButton_clicked()
     qDebug()<<algoritam;
     QString brojProcesa = ui->brojProcesa->currentText();
     qDebug()<<brojProcesa;
+    QFont font("Helvetica", 15);
 
-
+    QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem("P" + brojProcesa);
+    procesAxisLabel->setPos(10, (300/(brojProcesa.toInt()+1)) + 50);
+    procesAxisLabel->setFont(font);
+    procesAxisLabel->setDefaultTextColor(Qt::blue);
+    scene->addItem(procesAxisLabel);
 
 }
 
@@ -122,4 +106,46 @@ void Dialog::putSpinBoxesIntoArrays()
     dolazakSpinBoxes[4] = ui->dolazakP5;
     dolazakSpinBoxes[5] = ui->dolazakP6;
     dolazakSpinBoxes[6] = ui->dolazakP7;
+}
+
+void Dialog::drawAxis()
+{
+    QPen pen(Qt::blue);
+    QFont font("Helvetica", 15);
+    pen.setWidth(2);
+
+    QGraphicsLineItem* brojCiklusaLine = new QGraphicsLineItem(0,370, 750, 370);
+    QGraphicsLineItem* brojCiklusaLineArrowLeft = new QGraphicsLineItem(750,370, 720, 350);
+    QGraphicsLineItem* brojCiklusaLineArrowRight = new QGraphicsLineItem(750,370, 720, 390);
+    QGraphicsTextItem* brojCiklusaText = new QGraphicsTextItem("Broj Ciklusa");
+
+    brojCiklusaLine->setPen(pen);
+    brojCiklusaLineArrowLeft->setPen(pen);
+    brojCiklusaLineArrowRight->setPen(pen);
+    brojCiklusaText->setDefaultTextColor(Qt::blue);
+    brojCiklusaText->setFont(font);
+    brojCiklusaText->setPos(600,370);
+
+    scene->addItem(brojCiklusaLine);
+    scene->addItem(brojCiklusaText);
+    scene->addItem(brojCiklusaLineArrowLeft);
+    scene->addItem(brojCiklusaLineArrowRight);
+
+    QGraphicsLineItem* procesiLine = new QGraphicsLineItem(50,10, 50, 410);
+    QGraphicsLineItem* procesiLineArrowLeft = new QGraphicsLineItem(50,10, 30, 40);
+    QGraphicsLineItem* procesiLineArrowRight = new QGraphicsLineItem(50,10, 70, 40);
+    QGraphicsTextItem* procesiText = new QGraphicsTextItem("Procesi");
+
+    procesiLine->setPen(pen);
+    procesiLineArrowLeft->setPen(pen);
+    procesiLineArrowRight->setPen(pen);
+    procesiText->setFont(font);
+    procesiText->setDefaultTextColor(Qt::blue);
+    procesiText->setPos(80,10);
+
+
+    scene->addItem(procesiLine);
+    scene->addItem(procesiLineArrowLeft);
+    scene->addItem(procesiLineArrowRight);
+    scene->addItem(procesiText);
 }
