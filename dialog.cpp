@@ -63,8 +63,14 @@ void Dialog::on_pushButton_clicked()
     qDebug()<<brojProcesa;
     QFont font("Helvetica", 13);
     for(int i = 1; i <= brojProcesa.toInt(); i++ ){
+    int rectHeight= 300/brojProcesa.toInt();
+    QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,100,rectHeight);
+    qDebug()<<rectHeight;
+    rect->setPos(50, 50 + rectHeight*(i-1));
+    scene->addItem(rect);
+
     QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem("P" + QString::number(i));
-    procesAxisLabel->setPos(10, (300/(brojProcesa.toInt()+1))*i + 35);
+    procesAxisLabel->setPos(10, (330/(brojProcesa.toInt()+1))*i + 20);
     procesAxisLabel->setFont(font);
     procesAxisLabel->setDefaultTextColor(Qt::blue);
     scene->addItem(procesAxisLabel);
