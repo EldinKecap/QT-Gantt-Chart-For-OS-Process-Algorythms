@@ -1,5 +1,10 @@
 #include "dialog.h"
 #include "ui_dialog.h"
+#include "proces.h"
+
+bool compareDolazak(const Proces* p1, const Proces* p2) {
+    return p1->dolazakUCiklus < p2->dolazakUCiklus;
+}
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -16,9 +21,9 @@ Dialog::Dialog(QWidget *parent) :
     this->putSpinBoxesIntoArrays();
     this->drawAxis();
 
-    QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,40,300);
-    rect->setPos(5,50);
-    scene->addItem(rect);
+//    QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,40,300);
+//    rect->setPos(5,50);
+//    scene->addItem(rect);
 
 }
 
@@ -41,8 +46,11 @@ void Dialog::disableSpinBoxesBasedOnSelectedAmount(int numOfProcesses)
     for(int i = numOfProcesses ; i < 7; i++ ){
         brojCiklusaSpinBoxes[i]->setEnabled(false);
         dolazakSpinBoxes[i]->setEnabled(false);
+        brojCiklusaSpinBoxes[i]->setValue(0);
+        dolazakSpinBoxes[i]->setValue(0);
         if(ui->algoritam->currentText() == "Prioritet"){
             prioritetSpinBoxes[i]->setEnabled(false);
+            prioritetSpinBoxes[i]->setValue(0);
         }
     }
 
@@ -61,19 +69,41 @@ void Dialog::on_pushButton_clicked()
     qDebug()<<algoritam;
     QString brojProcesa = ui->brojProcesa->currentText();
     qDebug()<<brojProcesa;
-    QFont font("Helvetica", 13);
-    for(int i = 1; i <= brojProcesa.toInt(); i++ ){
-    int rectHeight= 300/brojProcesa.toInt();
-    QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,100,rectHeight);
-    qDebug()<<rectHeight;
-    rect->setPos(50, 50 + rectHeight*(i-1));
-    scene->addItem(rect);
+//    int size = sizeof(prioritetSpinBoxes) / sizeof(QSpinBox*);
+//    qDebug()<<size;
 
-    QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem("P" + QString::number(i));
-    procesAxisLabel->setPos(10, (330/(brojProcesa.toInt()+1))*i + 20);
-    procesAxisLabel->setFont(font);
-    procesAxisLabel->setDefaultTextColor(Qt::blue);
-    scene->addItem(procesAxisLabel);
+
+    if(algoritam == "FCFS"){
+        QFont font("Helvetica", 13);
+        int lengthOfAllProcesses = 0;
+        //CREATE ARRAY OF PROCESSES FOR SORTING AND CALCULATE THE EXECUTION CYCLE LENGTH
+        for(int i = 0; i < brojProcesa.toInt(); i++){
+            lengthOfAllProcesses += brojCiklusaSpinBoxes[i]->value();
+            QString naziv = "P" + QString::number(i + 1);
+            Proces* proces = new Proces(naziv ,brojCiklusaSpinBoxes[i]->value() ,dolazakSpinBoxes[i]->value());
+            this->procesArray[i] = proces;
+        }
+        // SORTING THE ARRAY BASED ON DOLAZAK
+        std::sort(procesArray, procesArray + brojProcesa.toInt(), compareDolazak);
+
+        for (int i = 0; i < brojProcesa.toInt(); ++i) {
+            qDebug()<<procesArray[i]->naziv;
+
+        }
+        for(int i = 1; i <= brojProcesa.toInt(); i++ ){
+            //drawing processes
+
+            int rectHeight = 300/brojProcesa.toInt();
+            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,650,rectHeight);
+            rect->setPos(50, 50 + rectHeight*(i-1));
+            scene->addItem(rect);
+
+            QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem("P" + QString::number(i));
+            procesAxisLabel->setPos(10, (330/(brojProcesa.toInt()+1))*i + 20);
+            procesAxisLabel->setFont(font);
+            procesAxisLabel->setDefaultTextColor(Qt::blue);
+            scene->addItem(procesAxisLabel);
+        }
     }
 }
 
@@ -90,6 +120,7 @@ void Dialog::on_algoritam_activated(const QString &arg1)
     }else if(arg1 != "Prioritet"){
         for(int i = 0; i < 7 ; i++){
             prioritetSpinBoxes[i]->setEnabled(false);
+            prioritetSpinBoxes[i]->setValue(0);
         }
     }
 }

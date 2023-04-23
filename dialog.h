@@ -9,7 +9,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 #include <QGraphicsLineItem>
-
+#include "proces.h"
 
 namespace Ui {
 class Dialog;
@@ -40,7 +40,7 @@ private:
     QSpinBox* brojCiklusaSpinBoxes[7];
     QSpinBox* dolazakSpinBoxes[7];
 
-
+    Proces* procesArray[7];
     void putSpinBoxesIntoArrays();
     void drawAxis();
 };
