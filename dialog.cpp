@@ -75,7 +75,7 @@ void Dialog::on_pushButton_clicked()
 
     if(algoritam == "FCFS"){
         QFont font("Helvetica", 13);
-        int lengthOfAllProcesses = 0;
+        float lengthOfAllProcesses = 0;
         //CREATE ARRAY OF PROCESSES FOR SORTING AND CALCULATE THE EXECUTION CYCLE LENGTH
         for(int i = 0; i < brojProcesa.toInt(); i++){
             lengthOfAllProcesses += brojCiklusaSpinBoxes[i]->value();
@@ -86,15 +86,26 @@ void Dialog::on_pushButton_clicked()
         // SORTING THE ARRAY BASED ON DOLAZAK
         std::sort(procesArray, procesArray + brojProcesa.toInt(), compareDolazak);
 
-        for (int i = 0; i < brojProcesa.toInt(); ++i) {
-            qDebug()<<procesArray[i]->naziv;
-
+        if(lengthOfAllProcesses == 0){
+            qDebug()<<"Unesite Broj ciklusa trajanja";
+            return;
         }
+
+        for (int i = 0; i < brojProcesa.toInt(); i++) {
+            procesArray[i]->procenatBrojaCiklusa = (procesArray[i]->brojCiklusa / lengthOfAllProcesses)*100;
+        }
+
+    // DRAWING PROCESSES
         for(int i = 1; i <= brojProcesa.toInt(); i++ ){
             //drawing processes
+// OVDJE SAM STAO
+            qDebug()<<procesArray[i-1]->procenatBrojaCiklusa;
+            float rectWidth = (procesArray[i-1]->procenatBrojaCiklusa/100) * 650;
+            qDebug()<<(int)rectWidth;
+   //         /////////////////////////////////
 
             int rectHeight = 300/brojProcesa.toInt();
-            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,650,rectHeight);
+            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,rectWidth,rectHeight);
             rect->setPos(50, 50 + rectHeight*(i-1));
             scene->addItem(rect);
 
@@ -103,6 +114,7 @@ void Dialog::on_pushButton_clicked()
             procesAxisLabel->setFont(font);
             procesAxisLabel->setDefaultTextColor(Qt::blue);
             scene->addItem(procesAxisLabel);
+            qDebug()<<"yo";
         }
     }
 }

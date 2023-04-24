@@ -8,7 +8,8 @@ public:
     Proces();
     Proces(QString naziv,int brojCiklusa,int dolazakUCiklus);
     QString naziv;
-    int brojCiklusa;
+    float brojCiklusa;
+    float procenatBrojaCiklusa;
     int dolazakUCiklus;
     int prioritet;
 };
