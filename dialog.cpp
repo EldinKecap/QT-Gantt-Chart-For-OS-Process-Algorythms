@@ -75,6 +75,8 @@ void Dialog::on_pushButton_clicked()
 
     if(algoritam == "FCFS"){
         QFont font("Helvetica", 13);
+        QPen pen(Qt::blue);
+        QBrush brush(Qt::green);
         float lengthOfAllProcesses = 0;
         //CREATE ARRAY OF PROCESSES FOR SORTING AND CALCULATE THE EXECUTION CYCLE LENGTH
         for(int i = 0; i < brojProcesa.toInt(); i++){
@@ -87,7 +89,7 @@ void Dialog::on_pushButton_clicked()
         std::sort(procesArray, procesArray + brojProcesa.toInt(), compareDolazak);
 
         if(lengthOfAllProcesses == 0){
-            qDebug()<<"Unesite Broj ciklusa trajanja";
+            qDebug() << "Unesite Broj ciklusa trajanja";
             return;
         }
 
@@ -96,25 +98,36 @@ void Dialog::on_pushButton_clicked()
         }
 
     // DRAWING PROCESSES
+        QVector <int> arrOfRectWidths;
         for(int i = 1; i <= brojProcesa.toInt(); i++ ){
             //drawing processes
-// OVDJE SAM STAO
-            qDebug()<<procesArray[i-1]->procenatBrojaCiklusa;
+//          OVDJE SAM STAO
+//          qDebug()<<procesArray[i-1]->procenatBrojaCiklusa;
             float rectWidth = (procesArray[i-1]->procenatBrojaCiklusa/100) * 650;
             qDebug()<<(int)rectWidth;
+            arrOfRectWidths.push_back((int)rectWidth);
+            int rectSpacing = 0;
+            if(i>1){
+            for(int j = 0; j < i-1 ; j++){
+                rectSpacing += arrOfRectWidths[j];
+            }
+            }
+            qDebug()<< rectSpacing;
    //         /////////////////////////////////
 
             int rectHeight = 300/brojProcesa.toInt();
             QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,rectWidth,rectHeight);
-            rect->setPos(50, 50 + rectHeight*(i-1));
+            rect->setPen(pen);
+            rect->setBrush(brush);
+            rect->setPos(50 + rectSpacing , 350 - rectHeight*(i));
             scene->addItem(rect);
 
-            QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem("P" + QString::number(i));
-            procesAxisLabel->setPos(10, (330/(brojProcesa.toInt()+1))*i + 20);
+            QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesArray[brojProcesa.toInt() - i]->naziv);
+            procesAxisLabel->setPos(10, (330/(brojProcesa.toInt()+1))*i + 20 ); // second argument (330/(brojProcesa.toInt()+1))*i + 20
             procesAxisLabel->setFont(font);
             procesAxisLabel->setDefaultTextColor(Qt::blue);
             scene->addItem(procesAxisLabel);
-            qDebug()<<"yo";
+
         }
     }
 }
