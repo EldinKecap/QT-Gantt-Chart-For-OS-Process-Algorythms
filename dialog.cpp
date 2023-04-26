@@ -69,8 +69,6 @@ void Dialog::on_pushButton_clicked()
     qDebug()<<algoritam;
     QString brojProcesa = ui->brojProcesa->currentText();
     qDebug()<<brojProcesa;
-//    int size = sizeof(prioritetSpinBoxes) / sizeof(QSpinBox*);
-//    qDebug()<<size;
 
 
     if(algoritam == "FCFS"){
@@ -100,20 +98,16 @@ void Dialog::on_pushButton_clicked()
     // DRAWING PROCESSES
         QVector <int> arrOfRectWidths;
         for(int i = 1; i <= brojProcesa.toInt(); i++ ){
-            //drawing processes
-//          OVDJE SAM STAO
-//          qDebug()<<procesArray[i-1]->procenatBrojaCiklusa;
             float rectWidth = (procesArray[i-1]->procenatBrojaCiklusa/100) * 650;
-            qDebug()<<(int)rectWidth;
             arrOfRectWidths.push_back((int)rectWidth);
             int rectSpacing = 0;
             if(i>1){
             for(int j = 0; j < i-1 ; j++){
                 rectSpacing += arrOfRectWidths[j];
-            }
+                }
             }
             qDebug()<< rectSpacing;
-   //         /////////////////////////////////
+
 
             int rectHeight = 300/brojProcesa.toInt();
             QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,rectWidth,rectHeight);
@@ -123,7 +117,7 @@ void Dialog::on_pushButton_clicked()
             scene->addItem(rect);
 
             QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesArray[brojProcesa.toInt() - i]->naziv);
-            procesAxisLabel->setPos(10, (330/(brojProcesa.toInt()+1))*i + 20 ); // second argument (330/(brojProcesa.toInt()+1))*i + 20
+            procesAxisLabel->setPos(10, (330/(brojProcesa.toInt()+1))*i + 20 );
             procesAxisLabel->setFont(font);
             procesAxisLabel->setDefaultTextColor(Qt::blue);
             scene->addItem(procesAxisLabel);
