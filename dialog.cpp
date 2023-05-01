@@ -106,8 +106,13 @@ void Dialog::on_pushButton_clicked()
                 rectSpacing += arrOfRectWidths[j];
                 }
             }
-            qDebug()<< rectSpacing;
+//            qDebug()<< rectSpacing;
 
+            QPen dashedLine = QPen(Qt::DashLine);
+            dashedLine.setColor(Qt::blue);
+            QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + rectSpacing,10, 50 + rectSpacing, 370);
+            endLine->setPen(dashedLine);
+            scene->addItem(endLine);
 
             int rectHeight = 300/brojProcesa.toInt();
             QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,rectWidth,rectHeight);
@@ -121,6 +126,7 @@ void Dialog::on_pushButton_clicked()
             procesAxisLabel->setFont(font);
             procesAxisLabel->setDefaultTextColor(Qt::blue);
             scene->addItem(procesAxisLabel);
+
 
         }
     }
