@@ -41,8 +41,11 @@ private:
     QSpinBox* dolazakSpinBoxes[7];
 
     Proces* procesArray[7];
+    QVector <Proces*> procesVector;
     void putSpinBoxesIntoArrays();
     void drawAxis();
+
+    void printProcesVector();
 };
 
 #endif // DIALOG_H

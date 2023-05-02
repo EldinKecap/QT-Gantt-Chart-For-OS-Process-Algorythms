@@ -66,30 +66,35 @@ void Dialog::on_pushButton_clicked()
 
     this->drawAxis();
     QString algoritam = ui->algoritam->currentText();
-    qDebug()<<algoritam;
+//    qDebug()<<algoritam;
     QString brojProcesa = ui->brojProcesa->currentText();
-    qDebug()<<brojProcesa;
+    int brojProcesaInt = brojProcesa.toInt();
+//    qDebug()<<brojProcesa;
+    bool isPreemptive =  ui->radioButton->isChecked();
 
+    float lengthOfAllProcesses = 0;
+    for(int i = 0; i < brojProcesa.toInt(); i++){
+        lengthOfAllProcesses += brojCiklusaSpinBoxes[i]->value();
+    }
 
-    if(algoritam == "FCFS"){
+    if(lengthOfAllProcesses == 0){
+        qDebug() << "Unesite Broj ciklusa trajanja";
+        return;
+    }
+
+    if(algoritam == "FCFS" && !isPreemptive){
         QFont font("Helvetica", 13);
         QPen pen(Qt::blue);
         QBrush brush(Qt::green);
-        float lengthOfAllProcesses = 0;
+
         //CREATE ARRAY OF PROCESSES FOR SORTING AND CALCULATE THE EXECUTION CYCLE LENGTH
         for(int i = 0; i < brojProcesa.toInt(); i++){
-            lengthOfAllProcesses += brojCiklusaSpinBoxes[i]->value();
             QString naziv = "P" + QString::number(i + 1);
             Proces* proces = new Proces(naziv ,brojCiklusaSpinBoxes[i]->value() ,dolazakSpinBoxes[i]->value());
             this->procesArray[i] = proces;
         }
         // SORTING THE ARRAY BASED ON DOLAZAK
         std::sort(procesArray, procesArray + brojProcesa.toInt(), compareDolazak);
-
-        if(lengthOfAllProcesses == 0){
-            qDebug() << "Unesite Broj ciklusa trajanja";
-            return;
-        }
 
         for (int i = 0; i < brojProcesa.toInt(); i++) {
             procesArray[i]->procenatBrojaCiklusa = (procesArray[i]->brojCiklusa / lengthOfAllProcesses)*100;
@@ -106,7 +111,6 @@ void Dialog::on_pushButton_clicked()
                 rectSpacing += arrOfRectWidths[j];
                 }
             }
-//            qDebug()<< rectSpacing;
 
             QPen dashedLine = QPen(Qt::DashLine);
             dashedLine.setColor(Qt::blue);
@@ -129,6 +133,102 @@ void Dialog::on_pushButton_clicked()
 
 
         }
+    }else if ( algoritam == "FCFS" && isPreemptive ){
+
+        for( int i = 0; i < brojProcesaInt ; i++ ){
+            QString naziv = "P" + QString::number(i+1);
+            Proces* proces = new Proces(naziv,brojCiklusaSpinBoxes[i]->value(),dolazakSpinBoxes[i]->value());
+            procesVector.push_back(proces);
+        }
+
+        std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
+        printProcesVector();
+        // splitting processes based on time of arrival
+        for( int i = 0; i < brojProcesaInt ; i++ ){
+            if(i+1 < brojProcesaInt){
+                if(procesVector[i]->brojCiklusa > procesVector[i+1]->dolazakUCiklus ){
+                    int remainingBrojCiklusa = procesVector[i]->brojCiklusa + procesVector[i]->dolazakUCiklus - procesVector[i+1]->dolazakUCiklus ;
+                    if(remainingBrojCiklusa != 0){
+                        procesVector[i]->brojCiklusa -= remainingBrojCiklusa;
+                        Proces* proces = new Proces(procesVector[i]->naziv,remainingBrojCiklusa, 99 );
+                        procesVector.push_back(proces);
+                    }
+                }
+            }
+        }
+
+        qDebug() << "_______________ Sliced up array ___________";
+        printProcesVector();
+        int checkAllCiklusi = 0;
+        for(Proces* value : procesVector){
+           checkAllCiklusi += value->brojCiklusa;
+             value->procenatBrojaCiklusa = (value->brojCiklusa / lengthOfAllProcesses)*100;
+        }
+        qDebug() << "Length all:" << lengthOfAllProcesses;
+        qDebug() << "Check Length all:" << checkAllCiklusi;
+        // Drawing
+
+        for(int i = 0; i < procesVector.size(); i++ ){
+            float rectWidth = (procesVector[i]->procenatBrojaCiklusa/100) * 650;
+            int rectHeight = 300/brojProcesaInt;
+            procesVector[i]->rectWidth = rectWidth;
+            procesVector[i]->rectHeight = rectHeight;
+            procesVector[i]->rectSpacingHeight = rectHeight * (i+1);
+            if( i > 0 ){
+                procesVector[i]->rectSpacing = procesVector[i-1]->rectSpacing + procesVector[i-1]->rectWidth;
+            }
+}
+        for(int i = 0; i < brojProcesaInt; i++ ){
+            QString nazivProcesa = procesVector[i]->naziv;
+            for(Proces* proces: procesVector){
+                if(proces->naziv == nazivProcesa){
+                    proces->rectSpacingHeight = procesVector[i]->rectSpacingHeight;
+                }
+            }
+        }
+
+
+        for(Proces* proces: procesVector){
+            QPen pen(Qt::blue);
+            QBrush brush(Qt::green);
+            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,proces->rectWidth,proces->rectHeight);
+            rect->setPos(50 + proces->rectSpacing , 350 - proces->rectSpacingHeight);
+            rect->setPen(pen);
+            rect->setBrush(brush);
+            qDebug() << proces->rectSpacingHeight;
+            scene->addItem(rect);
+
+            QPen dashedLine = QPen(Qt::DashLine);
+            dashedLine.setColor(Qt::blue);
+            QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + proces->rectSpacing,10, 50 + proces->rectSpacing, 370);
+            endLine->setPen(dashedLine);
+            scene->addItem(endLine);
+        }
+
+        for(int i = 0; i < brojProcesaInt; i++ ){
+                QFont font("Helvetica", 13);
+                QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesVector[brojProcesaInt - (i + 1)]->naziv);
+                procesAxisLabel->setPos(10, (330/(brojProcesaInt+1))*(i + 1) + 20 );
+                procesAxisLabel->setFont(font);
+                procesAxisLabel->setDefaultTextColor(Qt::blue);
+                scene->addItem(procesAxisLabel);
+        }
+
+
+// GUIDELINES
+
+
+
+
+
+
+
+
+
+
+
+
+        procesVector.clear();
     }
 }
 
@@ -217,4 +317,14 @@ void Dialog::drawAxis()
     scene->addItem(procesiLineArrowLeft);
     scene->addItem(procesiLineArrowRight);
     scene->addItem(procesiText);
+}
+
+void Dialog::printProcesVector()
+{
+    for(int i = 0; i < procesVector.size(); i++){
+        qDebug() << "Naziv: " << procesVector[i]->naziv;
+        qDebug() << "Broj Ciklusa: " << procesVector[i]->brojCiklusa;
+        qDebug() << "Dolazak u Ciklus: " << procesVector[i]->dolazakUCiklus;
+        qDebug() << "_________________________";
+    }
 }
