@@ -46,6 +46,7 @@ private:
     void drawAxis();
 
     void printProcesVector();
+    void fillProcesVector();
 };
 
 #endif // DIALOG_H
