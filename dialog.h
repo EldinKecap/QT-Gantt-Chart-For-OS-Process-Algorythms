@@ -47,6 +47,7 @@ private:
 
     void printProcesVector();
     void fillProcesVector();
+    void drawVectorNonPriemptive();
 };
 
 #endif // DIALOG_H
