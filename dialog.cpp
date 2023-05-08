@@ -219,13 +219,6 @@ void Dialog::on_pushButton_clicked()
 
         printProcesVector();
 
-//        QVector <Proces *> procesVectorForModification;
-
-//        for( Proces* proces: procesVector){
-//            Proces* procesForModification = new Proces(proces->naziv,proces->brojCiklusa,proces->dolazakUCiklus);
-//            procesVectorForModification.push_back(procesForModification);
-//        }
-
         int executionTime = procesVector[0]->dolazakUCiklus;
         for(int i = 0; i < procesVector.size(); i++){
             qDebug()<<executionTime;
@@ -241,7 +234,6 @@ void Dialog::on_pushButton_clicked()
                }
 
            }else if( executionTime > procesVector[i]->dolazakUCiklus ){
-               qDebug()<< "here";
                for(int j = i + 1; j < procesVector.size() ; j++){
                    if(procesVector[i]->brojCiklusa > procesVector[j]->brojCiklusa && executionTime >= procesVector[j]->dolazakUCiklus){
                        qDebug() <<" Switched: " << procesVector[i]->naziv << " with " << procesVector[j]->naziv;
@@ -255,15 +247,82 @@ void Dialog::on_pushButton_clicked()
 //           qDebug()<<executionTime;
         }
 
-
-
         printProcesVector();
 
         // //////////////////////////////////////////////////////////
         this->drawVectorNonPriemptive();
         // //////////////////////////////////////////////////////////
         procesVector.clear();
+    }if(algoritam == "RR" && !isPreemptive){
+        this->fillProcesVector();
 
+        std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
+
+        printProcesVector();
+
+        int quantum = 2;
+        for(int i = 0; i < procesVector.size(); i++){
+            if(procesVector[i]->brojCiklusa > quantum){
+                procesVector[i]->brojCiklusa -= quantum;
+                procesVector.push_back(new Proces (procesVector[i]->naziv,procesVector[i]->brojCiklusa,99));
+                procesVector[i]->brojCiklusa = quantum;
+            }
+        }
+
+        printProcesVector();
+        // //////////////////////
+        for (int i = 0; i < procesVector.size(); i++) {
+            procesVector[i]->procenatBrojaCiklusa = (procesVector[i]->brojCiklusa / lengthOfAllProcesses)*100;
+        }
+
+        for(int i = 0; i < procesVector.size(); i++ ){
+            float rectWidth = (procesVector[i]->procenatBrojaCiklusa/100) * 650;
+            int rectHeight = 300/brojProcesaInt;
+            procesVector[i]->rectWidth = rectWidth;
+            procesVector[i]->rectHeight = rectHeight;
+            procesVector[i]->rectSpacingHeight = rectHeight * (i+1);
+            if( i > 0 ){
+                procesVector[i]->rectSpacing = procesVector[i-1]->rectSpacing + procesVector[i-1]->rectWidth;
+            }
+}
+        for(int i = 0; i < brojProcesaInt; i++ ){
+            QString nazivProcesa = procesVector[i]->naziv;
+            for(Proces* proces: procesVector){
+                if(proces->naziv == nazivProcesa){
+                    proces->rectSpacingHeight = procesVector[i]->rectSpacingHeight;
+                }
+            }
+        }
+
+
+        for(Proces* proces: procesVector){
+            QPen pen(Qt::blue);
+            QBrush brush(Qt::green);
+            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,proces->rectWidth,proces->rectHeight);
+            rect->setPos(50 + proces->rectSpacing , 350 - proces->rectSpacingHeight);
+            rect->setPen(pen);
+            rect->setBrush(brush);
+//            qDebug() << proces->rectSpacingHeight;
+            scene->addItem(rect);
+
+            QPen dashedLine = QPen(Qt::DashLine);
+            dashedLine.setColor(Qt::blue);
+            QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + proces->rectSpacing,10, 50 + proces->rectSpacing, 370);
+            endLine->setPen(dashedLine);
+            scene->addItem(endLine);
+        }
+
+        for(int i = 0; i < brojProcesaInt; i++ ){
+                QFont font("Helvetica", 13);
+                QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesVector[brojProcesaInt - (i + 1)]->naziv);
+                procesAxisLabel->setPos(10, (330/(brojProcesaInt+1))*(i + 1) + 20 );
+                procesAxisLabel->setFont(font);
+                procesAxisLabel->setDefaultTextColor(Qt::blue);
+                scene->addItem(procesAxisLabel);
+        }
+
+        // ////////////////////////
+        procesVector.clear();
     }
 }
 
