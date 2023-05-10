@@ -7,6 +7,7 @@ class Proces
 public:
     Proces();
     Proces(QString naziv,int brojCiklusa,int dolazakUCiklus);
+    Proces(QString naziv,int brojCiklusa,int dolazakUCiklus, int prioritet);
     QString naziv;
 
     float brojCiklusa;

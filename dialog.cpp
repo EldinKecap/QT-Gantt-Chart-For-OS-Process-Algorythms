@@ -6,6 +6,8 @@ bool compareDolazak(const Proces* p1, const Proces* p2) {
     return p1->dolazakUCiklus < p2->dolazakUCiklus;
 }
 
+
+
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
@@ -82,7 +84,7 @@ void Dialog::on_pushButton_clicked()
         return;
     }
 
-    if(algoritam == "FCFS" && !isPreemptive){
+    if( algoritam == "FCFS" && !isPreemptive ){
         QFont font("Helvetica", 13);
         QPen pen(Qt::blue);
         QBrush brush(Qt::green);
@@ -211,7 +213,7 @@ void Dialog::on_pushButton_clicked()
         }
 
         procesVector.clear();
-    }else if(algoritam == "SJF" && !isPreemptive){
+    }else if( algoritam == "SJF" && !isPreemptive ){
 
         this->fillProcesVector();
 
@@ -250,10 +252,10 @@ void Dialog::on_pushButton_clicked()
         printProcesVector();
 
         // //////////////////////////////////////////////////////////
-        this->drawVectorNonPriemptive();
+        this->drawVectorNonPreemptive();
         // //////////////////////////////////////////////////////////
         procesVector.clear();
-    }if(algoritam == "RR" && !isPreemptive){
+    }else if( algoritam == "RR" ) {
         this->fillProcesVector();
 
         std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
@@ -268,69 +270,114 @@ void Dialog::on_pushButton_clicked()
                 procesVector[i]->brojCiklusa = quantum;
             }
         }
+        this->drawVectorPreemptive();
+        procesVector.clear();
+    } else if ( algoritam == "Prioritet" && !isPreemptive ){
+        this->fillProcesVector();
 
-        printProcesVector();
-        // //////////////////////
-        for (int i = 0; i < procesVector.size(); i++) {
-            procesVector[i]->procenatBrojaCiklusa = (procesVector[i]->brojCiklusa / lengthOfAllProcesses)*100;
-        }
+        std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
 
-        for(int i = 0; i < procesVector.size(); i++ ){
-            float rectWidth = (procesVector[i]->procenatBrojaCiklusa/100) * 650;
-            int rectHeight = 300/brojProcesaInt;
-            procesVector[i]->rectWidth = rectWidth;
-            procesVector[i]->rectHeight = rectHeight;
-            procesVector[i]->rectSpacingHeight = rectHeight * (i+1);
-            if( i > 0 ){
-                procesVector[i]->rectSpacing = procesVector[i-1]->rectSpacing + procesVector[i-1]->rectWidth;
-            }
-}
-        for(int i = 0; i < brojProcesaInt; i++ ){
-            QString nazivProcesa = procesVector[i]->naziv;
-            for(Proces* proces: procesVector){
-                if(proces->naziv == nazivProcesa){
-                    proces->rectSpacingHeight = procesVector[i]->rectSpacingHeight;
+//        this->printProcesVector();
+
+        bool executingProcess = false;
+        int counter = 0;
+        int startOfProcesExecutionTime = 0;
+
+        QVector <Proces *> executionQueue;
+        while(true){
+            if(!executingProcess){
+                QVector <Proces *> contendersForQueue;
+
+                for(int i = 0; i < procesVector.size(); i++){
+                    if(procesVector[i]->dolazakUCiklus <= counter){
+                        contendersForQueue.push_back(procesVector[i]);
+                    }
+                }
+
+                std::sort( contendersForQueue.begin(), contendersForQueue.end(),[](Proces * a, Proces * b){
+                    return a->prioritet > b->prioritet;
+                });
+
+
+
+                if(contendersForQueue.size() > 0){
+                    //
+                    QVector<Proces*> contendersWithHighestPriority;
+                    int highestPriority = 0;
+                    for(Proces* proces: contendersForQueue){
+                        if(proces->prioritet > highestPriority){
+                            highestPriority = proces->prioritet;
+                        }
+                    }
+                    qDebug()<<highestPriority<<"/highest Priority";
+                    for(Proces* proces: contendersForQueue){
+                        if(proces->prioritet == highestPriority){
+                            contendersWithHighestPriority.push_back(proces);
+                        }
+                    }
+
+                    printVector(contendersWithHighestPriority);
+                    if(contendersWithHighestPriority.size() > 0){
+                        executionQueue.push_back(contendersWithHighestPriority[0]);
+                        qDebug()<<procesVector.indexOf(contendersWithHighestPriority[0]) << "index high";
+                        procesVector.remove(procesVector.indexOf(contendersWithHighestPriority[0]));
+                    }else {
+                        executionQueue.push_back(contendersForQueue[contendersForQueue.size() - 1]);
+                        qDebug()<<procesVector.indexOf(contendersForQueue[contendersForQueue.size() - 1]) << "index not high";
+                        procesVector.remove(procesVector.indexOf(contendersForQueue[contendersForQueue.size() - 1]));
+                    }
+
+                    //
+                    executingProcess = true;
+                    startOfProcesExecutionTime = counter;
+                    contendersWithHighestPriority.clear();
+                    contendersForQueue.clear();
+                }
+
+            }else{
+                if(counter - (startOfProcesExecutionTime + executionQueue[executionQueue.size() - 1]->brojCiklusa) == 0){
+                    executingProcess = false;
                 }
             }
+            if(executionQueue.size() == brojProcesaInt){
+                break;
+            }
+            counter++;
         }
 
+//        printVector(executionQueue);
+        procesVector = executionQueue;
+        executionQueue.clear();
 
-        for(Proces* proces: procesVector){
-            QPen pen(Qt::blue);
-            QBrush brush(Qt::green);
-            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,proces->rectWidth,proces->rectHeight);
-            rect->setPos(50 + proces->rectSpacing , 350 - proces->rectSpacingHeight);
-            rect->setPen(pen);
-            rect->setBrush(brush);
-//            qDebug() << proces->rectSpacingHeight;
-            scene->addItem(rect);
-
-            QPen dashedLine = QPen(Qt::DashLine);
-            dashedLine.setColor(Qt::blue);
-            QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + proces->rectSpacing,10, 50 + proces->rectSpacing, 370);
-            endLine->setPen(dashedLine);
-            scene->addItem(endLine);
-        }
-
-        for(int i = 0; i < brojProcesaInt; i++ ){
-                QFont font("Helvetica", 13);
-                QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesVector[brojProcesaInt - (i + 1)]->naziv);
-                procesAxisLabel->setPos(10, (330/(brojProcesaInt+1))*(i + 1) + 20 );
-                procesAxisLabel->setFont(font);
-                procesAxisLabel->setDefaultTextColor(Qt::blue);
-                scene->addItem(procesAxisLabel);
-        }
-
-        // ////////////////////////
+        printProcesVector();
+        drawVectorNonPreemptive();
         procesVector.clear();
+
     }
+
+
+
+}
+
+void Dialog :: printVector(QVector<Proces*> vector){
+
+        qDebug()<< "______________New Print_________";
+
+        for(int i = 0; i < vector.size(); i++){
+            qDebug() << "Naziv: " << vector[i]->naziv;
+            qDebug() << "Broj Ciklusa: " << vector[i]->brojCiklusa;
+            qDebug() << "Dolazak u Ciklus: " << vector[i]->dolazakUCiklus;
+            if( ui->algoritam->currentText() == "Prioritet"){
+                qDebug() << "Prioritet: " << vector[i]->prioritet;
+            }
+            qDebug() << "_________________________";
+        }
 }
 
 void Dialog::on_brojProcesa_activated(const QString &brojProcesa)
 {
     disableSpinBoxesBasedOnSelectedAmount(brojProcesa.toInt());
 }
-
 
 void Dialog::on_algoritam_activated(const QString &arg1)
 {
@@ -342,6 +389,13 @@ void Dialog::on_algoritam_activated(const QString &arg1)
             prioritetSpinBoxes[i]->setValue(0);
         }
     }
+    if( arg1 == "RR"){
+        ui->radioButton->setChecked(true);
+        ui->radioButton->setEnabled(false);
+    } else if( arg1 != "RR"){
+        ui->radioButton->setChecked(false);
+        ui->radioButton->setEnabled(true);
+}
 }
 
 void Dialog::putSpinBoxesIntoArrays()
@@ -416,10 +470,14 @@ void Dialog::drawAxis()
 void Dialog::printProcesVector()
 {
     qDebug()<< "______________New Print_________";
+
     for(int i = 0; i < procesVector.size(); i++){
         qDebug() << "Naziv: " << procesVector[i]->naziv;
         qDebug() << "Broj Ciklusa: " << procesVector[i]->brojCiklusa;
         qDebug() << "Dolazak u Ciklus: " << procesVector[i]->dolazakUCiklus;
+        if( ui->algoritam->currentText() == "Prioritet"){
+            qDebug() << "Prioritet: " << procesVector[i]->prioritet;
+        }
         qDebug() << "_________________________";
     }
 }
@@ -430,12 +488,12 @@ void Dialog::fillProcesVector()
     int brojProcesaInt = brojProcesa.toInt();
     for( int i = 0; i < brojProcesaInt ; i++ ){
         QString naziv = "P" + QString::number(i+1);
-        Proces* proces = new Proces(naziv, brojCiklusaSpinBoxes[i]->value(), dolazakSpinBoxes[i]->value());
+        Proces* proces = new Proces(naziv, brojCiklusaSpinBoxes[i]->value(), dolazakSpinBoxes[i]->value(), prioritetSpinBoxes[i]->value());
         procesVector.push_back(proces);
     }
 }
 
-void Dialog::drawVectorNonPriemptive()
+void Dialog::drawVectorNonPreemptive()
 {   QString brojProcesa = ui->brojProcesa->currentText();
     int brojProcesaInt = brojProcesa.toInt();
 
@@ -484,5 +542,67 @@ void Dialog::drawVectorNonPriemptive()
         scene->addItem(procesAxisLabel);
 
 
+    }
+}
+
+void Dialog::drawVectorPreemptive()
+{
+    QString brojProcesa = ui->brojProcesa->currentText();
+    int brojProcesaInt = brojProcesa.toInt();
+
+    float lengthOfAllProcesses = 0;
+    for(int i = 0; i < brojProcesaInt; i++){
+        lengthOfAllProcesses += brojCiklusaSpinBoxes[i]->value();
+    }
+
+
+    for (int i = 0; i < procesVector.size(); i++) {
+        procesVector[i]->procenatBrojaCiklusa = (procesVector[i]->brojCiklusa / lengthOfAllProcesses)*100;
+    }
+
+    for(int i = 0; i < procesVector.size(); i++ ){
+        float rectWidth = (procesVector[i]->procenatBrojaCiklusa/100) * 650;
+        int rectHeight = 300/brojProcesaInt;
+        procesVector[i]->rectWidth = rectWidth;
+        procesVector[i]->rectHeight = rectHeight;
+        procesVector[i]->rectSpacingHeight = rectHeight * (i+1);
+        if( i > 0 ){
+            procesVector[i]->rectSpacing = procesVector[i-1]->rectSpacing + procesVector[i-1]->rectWidth;
+        }
+}
+    for(int i = 0; i < brojProcesaInt; i++ ){
+        QString nazivProcesa = procesVector[i]->naziv;
+        for(Proces* proces: procesVector){
+            if(proces->naziv == nazivProcesa){
+                proces->rectSpacingHeight = procesVector[i]->rectSpacingHeight;
+            }
+        }
+    }
+
+
+    for(Proces* proces: procesVector){
+        QPen pen(Qt::blue);
+        QBrush brush(Qt::green);
+        QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,proces->rectWidth,proces->rectHeight);
+        rect->setPos(50 + proces->rectSpacing , 350 - proces->rectSpacingHeight);
+        rect->setPen(pen);
+        rect->setBrush(brush);
+//            qDebug() << proces->rectSpacingHeight;
+        scene->addItem(rect);
+
+        QPen dashedLine = QPen(Qt::DashLine);
+        dashedLine.setColor(Qt::blue);
+        QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + proces->rectSpacing,10, 50 + proces->rectSpacing, 370);
+        endLine->setPen(dashedLine);
+        scene->addItem(endLine);
+    }
+
+    for(int i = 0; i < brojProcesaInt; i++ ){
+            QFont font("Helvetica", 13);
+            QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesVector[brojProcesaInt - (i + 1)]->naziv);
+            procesAxisLabel->setPos(10, (330/(brojProcesaInt+1))*(i + 1) + 20 );
+            procesAxisLabel->setFont(font);
+            procesAxisLabel->setDefaultTextColor(Qt::blue);
+            scene->addItem(procesAxisLabel);
     }
 }

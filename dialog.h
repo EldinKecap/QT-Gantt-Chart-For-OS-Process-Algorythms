@@ -24,6 +24,7 @@ public:
     ~Dialog();
     void disableSpinBoxesBasedOnSelectedAmount(int numOfProcesses);
 
+
 private slots:
     void on_pushButton_clicked();
 
@@ -47,7 +48,10 @@ private:
 
     void printProcesVector();
     void fillProcesVector();
-    void drawVectorNonPriemptive();
+    void drawVectorNonPreemptive();
+    void drawVectorPreemptive();
+
+    void printVector(QVector<Proces *> vector);
 };
 
 #endif // DIALOG_H
