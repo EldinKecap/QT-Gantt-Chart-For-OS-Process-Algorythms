@@ -6,8 +6,6 @@ bool compareDolazak(const Proces* p1, const Proces* p2) {
     return p1->dolazakUCiklus < p2->dolazakUCiklus;
 }
 
-
-
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
@@ -254,6 +252,136 @@ void Dialog::on_pushButton_clicked()
         // //////////////////////////////////////////////////////////
         this->drawVectorNonPreemptive();
         // //////////////////////////////////////////////////////////
+        procesVector.clear();
+    }else if( algoritam == "SJF" && isPreemptive){
+
+        this ->fillProcesVector();
+        std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
+        printProcesVector();
+
+        int executionTime = 0;
+        QVector <Proces*> executionQueue;
+        QVector <Proces*> waitingQueue;
+//        bool procesIsExecuting = false;
+//        int procesStartedExecutingTime;
+        bool firstProcesAdded = false;
+        qDebug()<<"SJF Preemptive";
+        while(true){
+
+            if(procesVector.size() != 0){
+                for(int i = 0; i < procesVector.size(); i++){
+                    if(procesVector[i]->dolazakUCiklus <= executionTime){
+                      waitingQueue.push_back(procesVector[i]);
+                      procesVector.remove(i);
+                      i--;
+                    }
+                }
+            }
+
+            if(waitingQueue.size() > 0){
+                firstProcesAdded = true;
+                std::sort(waitingQueue.begin(),waitingQueue.end(),[](Proces* a, Proces* b){
+                                    return a->brojCiklusa < b->brojCiklusa;
+                                });
+                if(executionQueue.size() == 0){
+                    executionQueue.push_back(new Proces(waitingQueue[0]->naziv, 0, waitingQueue[0]->dolazakUCiklus));
+                    executionQueue[executionQueue.size() - 1]->procesStartedExecuting = executionTime;
+                    executionQueue[executionQueue.size() - 1]->dolazakUCiklus = executionTime;
+                }
+//                else if(executionQueue.size() > 0){
+//                    if(executionQueue[executionQueue.size() - 1]->procesStartedExecuting)
+//                }
+            }
+            qDebug()<<"WaitingQueue";
+            printVector(waitingQueue);
+            if(executionQueue.size() > 0){
+
+                if(waitingQueue[0]->naziv ==  executionQueue[executionQueue.size() - 1]->naziv ){
+                    if(waitingQueue[0]->brojCiklusa == 0){
+                        waitingQueue.remove(0);
+                    }else{
+                        executionQueue[executionQueue.size() - 1]->brojCiklusa++;
+                        waitingQueue[0]->brojCiklusa--;
+                    }
+                }else{
+                    executionQueue.push_back(new Proces(waitingQueue[0]->naziv, 0, waitingQueue[0]->dolazakUCiklus));
+                    executionQueue[executionQueue.size() - 1]->procesStartedExecuting = executionTime;
+                }
+            }
+            qDebug()<< "executionQueue";
+//            printVector(executionQueue);
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////
+//            QVector <Proces*> contendersForQueue;
+// ////////////////////////////////////////////////////////////////////////////////////////////////
+//            for(int i = 0; i < procesVector.size(); i++){
+//                if(procesVector[i]->dolazakUCiklus <= executionTime){
+//                   contendersForQueue.push_back(procesVector[i]);
+//                }
+//            }
+// ////////////////////////////////////////////////////////////////////////////////////////////////
+//            if(contendersForQueue.size() > 0){
+
+
+//                if(executionQueue.size()>0){
+//                    // treba uvest started executing jer dolazak u ciklus nije tacno kad proces se krene izvrsavat
+//                    int executedBrojCiklusa =  executionTime - executionQueue[executionQueue.size() - 1]->procesStartedExecuting  ;
+//                    if(executedBrojCiklusa != 0){
+//                        procesVector.push_back(new Proces (
+//                                               executionQueue[executionQueue.size() - 1]->naziv,
+//                                               executionQueue[executionQueue.size() - 1]->brojCiklusa - executedBrojCiklusa, 99) );
+
+//                        executionQueue[executionQueue.size() - 1]->brojCiklusa = executedBrojCiklusa;
+//                    }
+//                }
+//                std::sort(contendersForQueue.begin(),contendersForQueue.end(),[](Proces* a, Proces* b){
+//                    return a->brojCiklusa < b->brojCiklusa;
+//                });
+
+//                executionQueue.push_back(contendersForQueue[0]);
+//                executionQueue[executionQueue.size() - 1]->procesStartedExecuting = executionTime;
+//                procesVector.remove(procesVector.indexOf(contendersForQueue[0]));
+
+//            }
+//            else if(contendersForQueue.size() == 1){
+
+//                    if(executionQueue.size()>0){
+//                        // treba uvest started executing jer dolazak u ciklus nije tacno kad proces se krene izvrsavat
+//                        int executedBrojCiklusa = (executionQueue[executionQueue.size() - 1]->procesStartedExecuting  + executionQueue[executionQueue.size() - 1]->brojCiklusa) - executionTime;
+//                        if(executedBrojCiklusa != 0){
+//                            procesVector.push_back(new Proces (
+//                                                   executionQueue[executionQueue.size() - 1]->naziv,
+//                                                   executionQueue[executionQueue.size() - 1]->brojCiklusa - executedBrojCiklusa, 99) );
+
+//                            executionQueue[executionQueue.size() - 1]->brojCiklusa = executedBrojCiklusa;
+//                        }
+//                    }
+//                executionQueue.push_back(contendersForQueue[0]);
+//                executionQueue[executionQueue.size() - 1]->procesStartedExecuting = executionTime;
+//                procesVector.remove(procesVector.indexOf(contendersForQueue[0]));
+
+//            }
+//            printVector(contendersForQueue);
+//            if(procesVector.size() == 0){
+//                procesVector = executionQueue;
+//                break;
+//            }
+//            contendersForQueue.clear();
+// ////////////////////////////////////////////////////////////////////////////////////////////////
+            if(waitingQueue.size() == 0 && firstProcesAdded){
+                           procesVector = executionQueue;
+                           executionQueue.clear();
+                           break;
+                       }
+
+            executionTime++;
+            qDebug()<< "Vrijeme Izvrsavanja: "<<executionTime;
+        }
+
+
+        executionQueue.clear();
+        drawVectorPreemptive();
+        printProcesVector();
         procesVector.clear();
     }else if( algoritam == "RR" ) {
         this->fillProcesVector();

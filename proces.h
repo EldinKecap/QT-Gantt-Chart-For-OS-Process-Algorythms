@@ -15,6 +15,8 @@ public:
     int dolazakUCiklus;
     int prioritet;
 
+    int procesStartedExecuting;
+
     float rectWidth;
     int rectHeight;
     int rectSpacing;
