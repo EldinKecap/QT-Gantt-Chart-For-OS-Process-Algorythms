@@ -59,7 +59,11 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QSpinBox" name="dolazakP1"/>
+     <widget class="QSpinBox" name="dolazakP1">
+      <property name="maximum">
+       <number>20</number>
+      </property>
+     </widget>
     </item>
     <item row="0" column="2">
      <widget class="QLabel" name="label_2">
@@ -75,6 +79,12 @@
      <widget class="QSpinBox" name="brojCiklusaP5">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
       </property>
      </widget>
     </item>
@@ -113,12 +123,18 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
      </widget>
     </item>
     <item row="4" column="2">
      <widget class="QSpinBox" name="prioritetP2">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
       </property>
      </widget>
     </item>
@@ -127,12 +143,18 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
      </widget>
     </item>
     <item row="4" column="7">
      <widget class="QSpinBox" name="prioritetP7">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
       </property>
      </widget>
     </item>
@@ -141,6 +163,9 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
      </widget>
     </item>
     <item row="4" column="6">
@@ -148,12 +173,18 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
      </widget>
     </item>
     <item row="4" column="4">
      <widget class="QSpinBox" name="prioritetP4">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
       </property>
      </widget>
     </item>
@@ -182,15 +213,34 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
+      </property>
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QSpinBox" name="brojCiklusaP1"/>
+     <widget class="QSpinBox" name="brojCiklusaP1">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
+      </property>
+     </widget>
     </item>
     <item row="2" column="2">
      <widget class="QSpinBox" name="brojCiklusaP2">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
       </property>
      </widget>
     </item>
@@ -199,12 +249,18 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
      </widget>
     </item>
     <item row="1" column="3">
      <widget class="QSpinBox" name="dolazakP3">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>20</number>
       </property>
      </widget>
     </item>
@@ -213,12 +269,21 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
+      </property>
      </widget>
     </item>
     <item row="1" column="4">
      <widget class="QSpinBox" name="dolazakP4">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>20</number>
       </property>
      </widget>
     </item>
@@ -227,6 +292,9 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
      </widget>
     </item>
     <item row="1" column="6">
@@ -234,12 +302,18 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
      </widget>
     </item>
     <item row="1" column="7">
      <widget class="QSpinBox" name="dolazakP7">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>20</number>
       </property>
      </widget>
     </item>
@@ -258,12 +332,24 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
+      </property>
      </widget>
     </item>
     <item row="2" column="6">
      <widget class="QSpinBox" name="brojCiklusaP6">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
       </property>
      </widget>
     </item>
