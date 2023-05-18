@@ -520,6 +520,157 @@ procesVector.clear();
         drawVectorNonPreemptive();
         procesVector.clear();
 
+    }else if(algoritam == "Prioritet" && isPreemptive){
+        this->fillProcesVector();
+        std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
+
+        QVector <Proces *> readyQueue;
+        QVector <Proces *> waitQueue;
+        QVector <Proces *> executionQueue;
+        bool processesAreExecuting = true;
+        int executionTime = 0;
+        while(processesAreExecuting){
+
+            for(int i = 0; i < procesVector.size(); i++){
+                if(executionTime == procesVector[i]->dolazakUCiklus){
+                    readyQueue.push_back(procesVector[i]);
+                    procesVector.remove(i);
+                    i--;
+                }
+            }
+
+            if(waitQueue.size() > 0){
+               for(int i = 0; i < waitQueue.size(); i++){
+                    if(executionTime >= waitQueue[i]->dolazakUCiklus){
+                        readyQueue.push_back(waitQueue[i]);
+                        waitQueue.remove(i);
+                        i--;
+                    }
+               }
+            }
+
+            if(readyQueue.size() > 0){
+                std::sort( readyQueue.begin(), readyQueue.end(),[](Proces * a, Proces * b){
+                    return a->prioritet > b->prioritet;
+                });
+
+                if(executionQueue.size() == 0){
+                    executionQueue.push_back(readyQueue[0]);
+                    executionQueue[executionQueue.size()-1]->procesStartedExecuting = executionTime;
+                    readyQueue.remove(0);
+
+                }else if(executionQueue.size() > 0){
+                    Proces * lastProcessInExecutionQueue = executionQueue[executionQueue.size()-1];
+                    int remainingBrojCiklusa = lastProcessInExecutionQueue->brojCiklusa  + lastProcessInExecutionQueue->procesStartedExecuting - executionTime;
+                    if(lastProcessInExecutionQueue->prioritet < readyQueue[0]->prioritet){
+                                if(remainingBrojCiklusa > 0){
+                                    waitQueue.push_back(new Proces(lastProcessInExecutionQueue->naziv,
+                                                                   remainingBrojCiklusa,
+                                                                   executionTime + 1,
+                                                                   lastProcessInExecutionQueue->prioritet));
+                                    lastProcessInExecutionQueue->brojCiklusa -= remainingBrojCiklusa;
+                                    executionQueue.push_back(readyQueue[0]);
+                                    executionQueue[executionQueue.size()-1]->procesStartedExecuting = executionTime;
+                                    readyQueue.remove(0);
+                                }else{
+                                    executionQueue.push_back(readyQueue[0]);
+                                    executionQueue[executionQueue.size()-1]->procesStartedExecuting = executionTime;
+                                    readyQueue.remove(0);
+                                }
+
+                    }else if(remainingBrojCiklusa == 0){
+                        executionQueue.push_back(readyQueue[0]);
+                        executionQueue[executionQueue.size()-1]->procesStartedExecuting = executionTime;
+                        readyQueue.remove(0);
+                    }
+                    qDebug() << "Remaining broj ciklusa: " << remainingBrojCiklusa;
+                }
+
+
+            }
+
+            if(procesVector.size() == 0 && waitQueue.size() == 0 && readyQueue.size() == 0){
+                processesAreExecuting = false;
+                procesVector = executionQueue;
+            }
+
+            executionTime++;
+            qDebug() << "Proces Vector size: " << procesVector.size();
+            qDebug() << "Wait Vector size: " << waitQueue.size();
+            qDebug() << "Ready Vector size: " << readyQueue.size();
+            qDebug() << "Vrijeme izvrsavanja: " << executionTime;
+        }
+        printVector(executionQueue);
+        int checkProcesLength = 0;
+        for(Proces * proces : executionQueue){
+            checkProcesLength += proces->brojCiklusa ;
+        }
+        qDebug() << "Original: " << lengthOfAllProcesses;
+        qDebug() << "Check: " << checkProcesLength;
+        executionQueue.clear();
+        //Drawing
+        for (int i = 0; i < procesVector.size(); i++) {
+            procesVector[i]->procenatBrojaCiklusa = (procesVector[i]->brojCiklusa / lengthOfAllProcesses)*100;
+        }
+qDebug()<< "yo";
+        QVector <QString> listOfProcesNaziva;
+        for(int i = 0; i < procesVector.size(); i++ ){
+            float rectWidth = (procesVector[i]->procenatBrojaCiklusa/100) * 650;
+            int rectHeight = 300/brojProcesaInt;
+            procesVector[i]->rectWidth = rectWidth;
+            procesVector[i]->rectHeight = rectHeight;
+            if(listOfProcesNaziva.indexOf(procesVector[i]->naziv) == -1){
+                listOfProcesNaziva.push_back(procesVector[i]->naziv);
+                procesVector[i]->rectSpacingHeight = rectHeight * (listOfProcesNaziva.indexOf(procesVector[i]->naziv)+1);
+            }
+            if( i > 0 ){
+                procesVector[i]->rectSpacing = procesVector[i-1]->rectSpacing + procesVector[i-1]->rectWidth;
+                }
+            }
+qDebug()<< procesVector.size();
+        listOfProcesNaziva.clear();
+        for(int i = 0; i < procesVector.size(); i++ ){
+            QString nazivProcesa = procesVector[i]->naziv;
+            for(Proces* proces: procesVector){
+                if(proces->naziv == nazivProcesa){
+                    proces->rectSpacingHeight = procesVector[i]->rectSpacingHeight;
+                }
+            }
+            qDebug()<<procesVector[i]->naziv << procesVector[i]->rectSpacingHeight;
+        }
+
+qDebug()<< "yo";
+        for(Proces* proces: procesVector){
+            QPen pen(Qt::blue);
+            QBrush brush(Qt::green);
+            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,proces->rectWidth,proces->rectHeight);
+            rect->setPos(50 + proces->rectSpacing , 350 - proces->rectSpacingHeight);
+            rect->setPen(pen);
+            rect->setBrush(brush);
+    //            qDebug() << proces->rectSpacingHeight;
+            scene->addItem(rect);
+
+            QPen dashedLine = QPen(Qt::DashLine);
+            dashedLine.setColor(Qt::blue);
+            QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + proces->rectSpacing,10, 50 + proces->rectSpacing, 370);
+            endLine->setPen(dashedLine);
+            scene->addItem(endLine);
+        }
+        qDebug()<< "yo";
+
+        for(int i = 0; i < procesVector.size(); i++ ){
+                if(listOfProcesNaziva.indexOf(procesVector[i]->naziv) == -1){
+                    QFont font("Helvetica", 13);
+                    QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesVector[i]->naziv);
+                    listOfProcesNaziva.push_back(procesVector[i]->naziv);
+                    procesAxisLabel->setPos(10, 330 - ((330/(brojProcesaInt+1))*(listOfProcesNaziva.indexOf(procesVector[i]->naziv) + 1) - 20) );
+                    procesAxisLabel->setFont(font);
+                    procesAxisLabel->setDefaultTextColor(Qt::blue);
+                    scene->addItem(procesAxisLabel);
+                }
+
+        }
+        procesVector.clear();
     }
 
 

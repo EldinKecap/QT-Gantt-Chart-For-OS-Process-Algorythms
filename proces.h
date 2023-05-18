@@ -16,6 +16,7 @@ public:
     int prioritet;
 
     int procesStartedExecuting;
+    int procesExecutedCycleCount;
 
     float rectWidth;
     int rectHeight;
