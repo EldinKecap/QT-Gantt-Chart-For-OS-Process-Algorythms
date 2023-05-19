@@ -83,56 +83,15 @@ void Dialog::on_pushButton_clicked()
     }
 
     if( algoritam == "FCFS" && !isPreemptive ){
-        QFont font("Helvetica", 13);
-        QPen pen(Qt::blue);
-        QBrush brush(Qt::green);
 
-        //CREATE ARRAY OF PROCESSES FOR SORTING AND CALCULATE THE EXECUTION CYCLE LENGTH
-        for(int i = 0; i < brojProcesa.toInt(); i++){
-            QString naziv = "P" + QString::number(i + 1);
-            Proces* proces = new Proces(naziv ,brojCiklusaSpinBoxes[i]->value() ,dolazakSpinBoxes[i]->value());
-            this->procesArray[i] = proces;
-        }
-        // SORTING THE ARRAY BASED ON DOLAZAK
-        std::sort(procesArray, procesArray + brojProcesa.toInt(), compareDolazak);
+        this->fillProcesVector();
 
-        for (int i = 0; i < brojProcesa.toInt(); i++) {
-            procesArray[i]->procenatBrojaCiklusa = (procesArray[i]->brojCiklusa / lengthOfAllProcesses)*100;
-        }
+        std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
 
-    // DRAWING PROCESSES
-        QVector <int> arrOfRectWidths;
-        for(int i = 1; i <= brojProcesa.toInt(); i++ ){
-            float rectWidth = (procesArray[i-1]->procenatBrojaCiklusa/100) * 650;
-            arrOfRectWidths.push_back((int)rectWidth);
-            int rectSpacing = 0;
-            if(i>1){
-            for(int j = 0; j < i-1 ; j++){
-                rectSpacing += arrOfRectWidths[j];
-                }
-            }
+        this->drawVectorNonPreemptive();
 
-            QPen dashedLine = QPen(Qt::DashLine);
-            dashedLine.setColor(Qt::blue);
-            QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + rectSpacing,10, 50 + rectSpacing, 370);
-            endLine->setPen(dashedLine);
-            scene->addItem(endLine);
+        procesVector.clear();
 
-            int rectHeight = 300/brojProcesa.toInt();
-            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,rectWidth,rectHeight);
-            rect->setPen(pen);
-            rect->setBrush(brush);
-            rect->setPos(50 + rectSpacing , 350 - rectHeight*(i));
-            scene->addItem(rect);
-
-            QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesArray[brojProcesa.toInt() - i]->naziv);
-            procesAxisLabel->setPos(10, (330/(brojProcesa.toInt()+1))*i + 20 );
-            procesAxisLabel->setFont(font);
-            procesAxisLabel->setDefaultTextColor(Qt::blue);
-            scene->addItem(procesAxisLabel);
-
-
-        }
     }else if ( algoritam == "FCFS" && isPreemptive ){
 
         this->fillProcesVector();
