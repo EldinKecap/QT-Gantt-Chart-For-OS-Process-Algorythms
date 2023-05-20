@@ -66,10 +66,10 @@ void Dialog::on_pushButton_clicked()
 
     this->drawAxis();
     QString algoritam = ui->algoritam->currentText();
-//    qDebug()<<algoritam;
+
     QString brojProcesa = ui->brojProcesa->currentText();
     int brojProcesaInt = brojProcesa.toInt();
-//    qDebug()<<brojProcesa;
+
     bool isPreemptive =  ui->radioButton->isChecked();
 
     float lengthOfAllProcesses = 0;
