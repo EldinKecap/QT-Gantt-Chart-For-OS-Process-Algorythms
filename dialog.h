@@ -48,6 +48,7 @@ private:
 
     void printProcesVector();
     void fillProcesVector();
+    void drawProcesVector();
     void drawVectorNonPreemptive();
     void drawVectorPreemptive();
 

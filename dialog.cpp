@@ -97,7 +97,7 @@ void Dialog::on_pushButton_clicked()
         this->fillProcesVector();
 
         std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
-//        printProcesVector();
+
         // splitting processes based on time of arrival
         for( int i = 0; i < brojProcesaInt ; i++ ){
             if(i+1 < brojProcesaInt){
@@ -115,59 +115,13 @@ void Dialog::on_pushButton_clicked()
 //        qDebug() << "_______________ Sliced up array ___________";
 //        printProcesVector();
 //        int checkAllCiklusi = 0;
-        for(Proces* value : procesVector){
+//        for(Proces* value : procesVector){
 //           checkAllCiklusi += value->brojCiklusa;
-           value->procenatBrojaCiklusa = (value->brojCiklusa / lengthOfAllProcesses)*100;
-        }
+//        }
 //        qDebug() << "Length all:" << lengthOfAllProcesses;
 //        qDebug() << "Check Length all:" << checkAllCiklusi;
-        // Drawing
 
-        for(int i = 0; i < procesVector.size(); i++ ){
-            float rectWidth = (procesVector[i]->procenatBrojaCiklusa/100) * 650;
-            int rectHeight = 300/brojProcesaInt;
-            procesVector[i]->rectWidth = rectWidth;
-            procesVector[i]->rectHeight = rectHeight;
-            procesVector[i]->rectSpacingHeight = rectHeight * (i+1);
-            if( i > 0 ){
-                procesVector[i]->rectSpacing = procesVector[i-1]->rectSpacing + procesVector[i-1]->rectWidth;
-            }
-}
-        for(int i = 0; i < brojProcesaInt; i++ ){
-            QString nazivProcesa = procesVector[i]->naziv;
-            for(Proces* proces: procesVector){
-                if(proces->naziv == nazivProcesa){
-                    proces->rectSpacingHeight = procesVector[i]->rectSpacingHeight;
-                }
-            }
-        }
-
-
-        for(Proces* proces: procesVector){
-            QPen pen(Qt::blue);
-            QBrush brush(Qt::green);
-            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,proces->rectWidth,proces->rectHeight);
-            rect->setPos(50 + proces->rectSpacing , 350 - proces->rectSpacingHeight);
-            rect->setPen(pen);
-            rect->setBrush(brush);
-//            qDebug() << proces->rectSpacingHeight;
-            scene->addItem(rect);
-
-            QPen dashedLine = QPen(Qt::DashLine);
-            dashedLine.setColor(Qt::blue);
-            QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + proces->rectSpacing,10, 50 + proces->rectSpacing, 370);
-            endLine->setPen(dashedLine);
-            scene->addItem(endLine);
-        }
-
-        for(int i = 0; i < brojProcesaInt; i++ ){
-                QFont font("Helvetica", 13);
-                QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesVector[brojProcesaInt - (i + 1)]->naziv);
-                procesAxisLabel->setPos(10, (330/(brojProcesaInt+1))*(i + 1) + 20 );
-                procesAxisLabel->setFont(font);
-                procesAxisLabel->setDefaultTextColor(Qt::blue);
-                scene->addItem(procesAxisLabel);
-        }
+        this->drawVectorPreemptive();
 
         procesVector.clear();
     }else if( algoritam == "SJF" && !isPreemptive ){
@@ -568,67 +522,7 @@ procesVector.clear();
         qDebug() << "Check: " << checkProcesLength;
         executionQueue.clear();
         //Drawing
-        for (int i = 0; i < procesVector.size(); i++) {
-            procesVector[i]->procenatBrojaCiklusa = (procesVector[i]->brojCiklusa / lengthOfAllProcesses)*100;
-        }
-qDebug()<< "yo";
-        QVector <QString> listOfProcesNaziva;
-        for(int i = 0; i < procesVector.size(); i++ ){
-            float rectWidth = (procesVector[i]->procenatBrojaCiklusa/100) * 650;
-            int rectHeight = 300/brojProcesaInt;
-            procesVector[i]->rectWidth = rectWidth;
-            procesVector[i]->rectHeight = rectHeight;
-            if(listOfProcesNaziva.indexOf(procesVector[i]->naziv) == -1){
-                listOfProcesNaziva.push_back(procesVector[i]->naziv);
-                procesVector[i]->rectSpacingHeight = rectHeight * (listOfProcesNaziva.indexOf(procesVector[i]->naziv)+1);
-            }
-            if( i > 0 ){
-                procesVector[i]->rectSpacing = procesVector[i-1]->rectSpacing + procesVector[i-1]->rectWidth;
-                }
-            }
-qDebug()<< procesVector.size();
-        listOfProcesNaziva.clear();
-        for(int i = 0; i < procesVector.size(); i++ ){
-            QString nazivProcesa = procesVector[i]->naziv;
-            for(Proces* proces: procesVector){
-                if(proces->naziv == nazivProcesa){
-                    proces->rectSpacingHeight = procesVector[i]->rectSpacingHeight;
-                }
-            }
-            qDebug()<<procesVector[i]->naziv << procesVector[i]->rectSpacingHeight;
-        }
-
-qDebug()<< "yo";
-        for(Proces* proces: procesVector){
-            QPen pen(Qt::blue);
-            QBrush brush(Qt::green);
-            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,proces->rectWidth,proces->rectHeight);
-            rect->setPos(50 + proces->rectSpacing , 350 - proces->rectSpacingHeight);
-            rect->setPen(pen);
-            rect->setBrush(brush);
-    //            qDebug() << proces->rectSpacingHeight;
-            scene->addItem(rect);
-
-            QPen dashedLine = QPen(Qt::DashLine);
-            dashedLine.setColor(Qt::blue);
-            QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + proces->rectSpacing,10, 50 + proces->rectSpacing, 370);
-            endLine->setPen(dashedLine);
-            scene->addItem(endLine);
-        }
-        qDebug()<< "yo";
-
-        for(int i = 0; i < procesVector.size(); i++ ){
-                if(listOfProcesNaziva.indexOf(procesVector[i]->naziv) == -1){
-                    QFont font("Helvetica", 13);
-                    QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesVector[i]->naziv);
-                    listOfProcesNaziva.push_back(procesVector[i]->naziv);
-                    procesAxisLabel->setPos(10, 330 - ((330/(brojProcesaInt+1))*(listOfProcesNaziva.indexOf(procesVector[i]->naziv) + 1) - 20) );
-                    procesAxisLabel->setFont(font);
-                    procesAxisLabel->setDefaultTextColor(Qt::blue);
-                    scene->addItem(procesAxisLabel);
-                }
-
-        }
+        this->drawProcesVector();
         procesVector.clear();
     }
 
@@ -767,6 +661,79 @@ void Dialog::fillProcesVector()
         QString naziv = "P" + QString::number(i+1);
         Proces* proces = new Proces(naziv, brojCiklusaSpinBoxes[i]->value(), dolazakSpinBoxes[i]->value(), prioritetSpinBoxes[i]->value());
         procesVector.push_back(proces);
+    }
+}
+
+void Dialog::drawProcesVector()
+{
+    QString brojProcesa = ui->brojProcesa->currentText();
+        int brojProcesaInt = brojProcesa.toInt();
+
+        float lengthOfAllProcesses = 0;
+        for(int i = 0; i < brojProcesaInt; i++){
+            lengthOfAllProcesses += brojCiklusaSpinBoxes[i]->value();
+        }
+
+    for (int i = 0; i < procesVector.size(); i++) {
+        procesVector[i]->procenatBrojaCiklusa = (procesVector[i]->brojCiklusa / lengthOfAllProcesses)*100;
+    }
+qDebug()<< "yo";
+    QVector <QString> listOfProcesNaziva;
+    for(int i = 0; i < procesVector.size(); i++ ){
+        float rectWidth = (procesVector[i]->procenatBrojaCiklusa/100) * 650;
+        int rectHeight = 300/brojProcesaInt;
+        procesVector[i]->rectWidth = rectWidth;
+        procesVector[i]->rectHeight = rectHeight;
+        if(listOfProcesNaziva.indexOf(procesVector[i]->naziv) == -1){
+            listOfProcesNaziva.push_back(procesVector[i]->naziv);
+            procesVector[i]->rectSpacingHeight = rectHeight * (listOfProcesNaziva.indexOf(procesVector[i]->naziv)+1);
+        }
+        if( i > 0 ){
+            procesVector[i]->rectSpacing = procesVector[i-1]->rectSpacing + procesVector[i-1]->rectWidth;
+            }
+        }
+qDebug()<< procesVector.size();
+    listOfProcesNaziva.clear();
+    for(int i = 0; i < procesVector.size(); i++ ){
+        QString nazivProcesa = procesVector[i]->naziv;
+        for(Proces* proces: procesVector){
+            if(proces->naziv == nazivProcesa){
+                proces->rectSpacingHeight = procesVector[i]->rectSpacingHeight;
+            }
+        }
+        qDebug()<<procesVector[i]->naziv << procesVector[i]->rectSpacingHeight;
+    }
+
+qDebug()<< "yo";
+    for(Proces* proces: procesVector){
+        QPen pen(Qt::blue);
+        QBrush brush(Qt::green);
+        QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,proces->rectWidth,proces->rectHeight);
+        rect->setPos(50 + proces->rectSpacing , 350 - proces->rectSpacingHeight);
+        rect->setPen(pen);
+        rect->setBrush(brush);
+//            qDebug() << proces->rectSpacingHeight;
+        scene->addItem(rect);
+
+        QPen dashedLine = QPen(Qt::DashLine);
+        dashedLine.setColor(Qt::blue);
+        QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + proces->rectSpacing,10, 50 + proces->rectSpacing, 370);
+        endLine->setPen(dashedLine);
+        scene->addItem(endLine);
+    }
+    qDebug()<< "yo";
+
+    for(int i = 0; i < procesVector.size(); i++ ){
+            if(listOfProcesNaziva.indexOf(procesVector[i]->naziv) == -1){
+                QFont font("Helvetica", 13);
+                QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesVector[i]->naziv);
+                listOfProcesNaziva.push_back(procesVector[i]->naziv);
+                procesAxisLabel->setPos(10, 330 - ((330/(brojProcesaInt+1))*(listOfProcesNaziva.indexOf(procesVector[i]->naziv) + 1) - 20) );
+                procesAxisLabel->setFont(font);
+                procesAxisLabel->setDefaultTextColor(Qt::blue);
+                scene->addItem(procesAxisLabel);
+            }
+
     }
 }
 
