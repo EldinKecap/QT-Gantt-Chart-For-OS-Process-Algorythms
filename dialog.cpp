@@ -121,7 +121,7 @@ void Dialog::on_pushButton_clicked()
 //        qDebug() << "Length all:" << lengthOfAllProcesses;
 //        qDebug() << "Check Length all:" << checkAllCiklusi;
 
-        this->drawVectorPreemptive();
+        this->drawProcesVector();
 
         procesVector.clear();
     }else if( algoritam == "SJF" && !isPreemptive ){
