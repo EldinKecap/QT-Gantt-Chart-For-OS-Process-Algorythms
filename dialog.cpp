@@ -176,43 +176,7 @@ void Dialog::on_pushButton_clicked()
             executionTime++;
         }
 
-
-
-
-
-// //////////////////////////////////////////////////////////////// RADI ALI NE UVIJEK
-//        int executionTime = procesVector[0]->dolazakUCiklus;
-//        for(int i = 0; i < procesVector.size(); i++){
-//            qDebug()<<executionTime;
-//            qDebug()<<procesVector[i]->dolazakUCiklus;
-//           if( (i+1) < procesVector.size() && procesVector[i]->dolazakUCiklus == procesVector[i+1]->dolazakUCiklus ){
-//               for(int j = i; j < procesVector.size() ; j++){
-//                   if(procesVector[i]->brojCiklusa > procesVector[j]->brojCiklusa){
-//                       qDebug() <<" Switched: " << procesVector[i]->naziv << " with " << procesVector[j]->naziv;
-//                       Proces * tempProces = procesVector[i];
-//                       procesVector[i] = procesVector[j];
-//                       procesVector[j] = tempProces;
-//                   }
-//               }
-
-//           }else if( executionTime > procesVector[i]->dolazakUCiklus ){
-//               for(int j = i + 1; j < procesVector.size() ; j++){
-//                   if(procesVector[i]->brojCiklusa > procesVector[j]->brojCiklusa && executionTime >= procesVector[j]->dolazakUCiklus){
-//                       qDebug() <<" Switched: " << procesVector[i]->naziv << " with " << procesVector[j]->naziv;
-//                       Proces * tempProces = procesVector[i];
-//                       procesVector[i] = procesVector[j];
-//                       procesVector[j] = tempProces;
-//                   }
-//               }
-//           }
-//           executionTime += procesVector[i]->brojCiklusa;
-// //           qDebug()<<executionTime;
-//        }
-
-// ///////////////////////////////////////////////////////////////////////////
-        // //////////////////////////////////////////////////////////
-
-        printProcesVector();
+//        printProcesVector();
 
         this->drawProcesVector();
         // //////////////////////////////////////////////////////////
