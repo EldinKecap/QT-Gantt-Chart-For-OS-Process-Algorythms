@@ -132,38 +132,89 @@ void Dialog::on_pushButton_clicked()
 
         printProcesVector();
 
-        int executionTime = procesVector[0]->dolazakUCiklus;
-        for(int i = 0; i < procesVector.size(); i++){
-            qDebug()<<executionTime;
-            qDebug()<<procesVector[i]->dolazakUCiklus;
-           if( (i+1) < procesVector.size() && procesVector[i]->dolazakUCiklus == procesVector[i+1]->dolazakUCiklus ){
-               for(int j = i; j < procesVector.size() ; j++){
-                   if(procesVector[i]->brojCiklusa > procesVector[j]->brojCiklusa){
-                       qDebug() <<" Switched: " << procesVector[i]->naziv << " with " << procesVector[j]->naziv;
-                       Proces * tempProces = procesVector[i];
-                       procesVector[i] = procesVector[j];
-                       procesVector[j] = tempProces;
-                   }
-               }
+        int executionTime = 0;
+        int procesIsExecuting = 0;
+        QVector <Proces *> readyQueue;
+        QVector <Proces *> executionQueue;
 
-           }else if( executionTime > procesVector[i]->dolazakUCiklus ){
-               for(int j = i + 1; j < procesVector.size() ; j++){
-                   if(procesVector[i]->brojCiklusa > procesVector[j]->brojCiklusa && executionTime >= procesVector[j]->dolazakUCiklus){
-                       qDebug() <<" Switched: " << procesVector[i]->naziv << " with " << procesVector[j]->naziv;
-                       Proces * tempProces = procesVector[i];
-                       procesVector[i] = procesVector[j];
-                       procesVector[j] = tempProces;
-                   }
-               }
-           }
-           executionTime += procesVector[i]->brojCiklusa;
-//           qDebug()<<executionTime;
+        while(true){
+            if(procesVector.size() > 0){
+                for(int i = 0; i < procesVector.size(); i++){
+                    if(procesVector[i]->dolazakUCiklus <= executionTime){
+                        readyQueue.push_back(procesVector[i]);
+                        procesVector.remove(i);
+                        i--;
+                    }
+                }
+            }
+
+            std::sort(readyQueue.begin(), readyQueue.end(),[](Proces* a, Proces* b){
+                return a->brojCiklusa < b->brojCiklusa;
+            });
+
+
+            if(readyQueue.size() > 0 && procesIsExecuting == 0){
+                executionQueue.push_back(readyQueue[0]);
+                readyQueue.remove(0);
+                procesIsExecuting++;
+            }
+
+            if(procesIsExecuting > 0){
+                if(executionQueue[executionQueue.size() - 1]->brojCiklusa > procesIsExecuting){
+                    procesIsExecuting++;
+                } else if (executionQueue[executionQueue.size() - 1]->brojCiklusa == procesIsExecuting){
+                    procesIsExecuting = 0;
+                }
+            }
+
+            if(executionQueue.size() == brojProcesaInt){
+                procesVector = executionQueue;
+                executionQueue.clear();
+                break;
+            }
+
+            executionTime++;
         }
+
+
+
+
+
+// //////////////////////////////////////////////////////////////// RADI ALI NE UVIJEK
+//        int executionTime = procesVector[0]->dolazakUCiklus;
+//        for(int i = 0; i < procesVector.size(); i++){
+//            qDebug()<<executionTime;
+//            qDebug()<<procesVector[i]->dolazakUCiklus;
+//           if( (i+1) < procesVector.size() && procesVector[i]->dolazakUCiklus == procesVector[i+1]->dolazakUCiklus ){
+//               for(int j = i; j < procesVector.size() ; j++){
+//                   if(procesVector[i]->brojCiklusa > procesVector[j]->brojCiklusa){
+//                       qDebug() <<" Switched: " << procesVector[i]->naziv << " with " << procesVector[j]->naziv;
+//                       Proces * tempProces = procesVector[i];
+//                       procesVector[i] = procesVector[j];
+//                       procesVector[j] = tempProces;
+//                   }
+//               }
+
+//           }else if( executionTime > procesVector[i]->dolazakUCiklus ){
+//               for(int j = i + 1; j < procesVector.size() ; j++){
+//                   if(procesVector[i]->brojCiklusa > procesVector[j]->brojCiklusa && executionTime >= procesVector[j]->dolazakUCiklus){
+//                       qDebug() <<" Switched: " << procesVector[i]->naziv << " with " << procesVector[j]->naziv;
+//                       Proces * tempProces = procesVector[i];
+//                       procesVector[i] = procesVector[j];
+//                       procesVector[j] = tempProces;
+//                   }
+//               }
+//           }
+//           executionTime += procesVector[i]->brojCiklusa;
+// //           qDebug()<<executionTime;
+//        }
+
+// ///////////////////////////////////////////////////////////////////////////
+        // //////////////////////////////////////////////////////////
 
         printProcesVector();
 
-        // //////////////////////////////////////////////////////////
-        this->drawVectorNonPreemptive();
+        this->drawProcesVector();
         // //////////////////////////////////////////////////////////
         procesVector.clear();
     }else if( algoritam == "SJF" && isPreemptive){
@@ -268,71 +319,8 @@ void Dialog::on_pushButton_clicked()
         qDebug()<<"original length all broj Ciklusa: " << lengthOfAllProcesses;
         qDebug()<<"check length all broj Ciklusa: " << checkProcesBrojCiklusaLength;
 
-        // /////////////////////////////////////////////////////////
-        // Drawing processes
-        for (int i = 0; i < procesVector.size(); i++) {
-            procesVector[i]->procenatBrojaCiklusa = (procesVector[i]->brojCiklusa / lengthOfAllProcesses)*100;
-        }
-qDebug()<< "yo";
-        QVector <QString> listOfProcesNaziva;
-        for(int i = 0; i < procesVector.size(); i++ ){
-            float rectWidth = (procesVector[i]->procenatBrojaCiklusa/100) * 650;
-            int rectHeight = 300/brojProcesaInt;
-            procesVector[i]->rectWidth = rectWidth;
-            procesVector[i]->rectHeight = rectHeight;
-            if(listOfProcesNaziva.indexOf(procesVector[i]->naziv) == -1){
-                listOfProcesNaziva.push_back(procesVector[i]->naziv);
-                procesVector[i]->rectSpacingHeight = rectHeight * (listOfProcesNaziva.indexOf(procesVector[i]->naziv)+1);
-            }
-            if( i > 0 ){
-                procesVector[i]->rectSpacing = procesVector[i-1]->rectSpacing + procesVector[i-1]->rectWidth;
-                }
-            }
-qDebug()<< procesVector.size();
-        listOfProcesNaziva.clear();
-        for(int i = 0; i < procesVector.size(); i++ ){
-            QString nazivProcesa = procesVector[i]->naziv;
-            for(Proces* proces: procesVector){
-                if(proces->naziv == nazivProcesa){
-                    proces->rectSpacingHeight = procesVector[i]->rectSpacingHeight;
-                }
-            }
-            qDebug()<<procesVector[i]->naziv << procesVector[i]->rectSpacingHeight;
-        }
-
-qDebug()<< "yo";
-        for(Proces* proces: procesVector){
-            QPen pen(Qt::blue);
-            QBrush brush(Qt::green);
-            QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,proces->rectWidth,proces->rectHeight);
-            rect->setPos(50 + proces->rectSpacing , 350 - proces->rectSpacingHeight);
-            rect->setPen(pen);
-            rect->setBrush(brush);
-    //            qDebug() << proces->rectSpacingHeight;
-            scene->addItem(rect);
-
-            QPen dashedLine = QPen(Qt::DashLine);
-            dashedLine.setColor(Qt::blue);
-            QGraphicsLineItem* endLine = new QGraphicsLineItem(50 + proces->rectSpacing,10, 50 + proces->rectSpacing, 370);
-            endLine->setPen(dashedLine);
-            scene->addItem(endLine);
-        }
-        qDebug()<< "yo";
-
-        for(int i = 0; i < procesVector.size(); i++ ){
-                if(listOfProcesNaziva.indexOf(procesVector[i]->naziv) == -1){
-                    QFont font("Helvetica", 13);
-                    QGraphicsTextItem * procesAxisLabel = new QGraphicsTextItem(procesVector[i]->naziv);
-                    listOfProcesNaziva.push_back(procesVector[i]->naziv);
-                    procesAxisLabel->setPos(10, 330 - ((330/(brojProcesaInt+1))*(listOfProcesNaziva.indexOf(procesVector[i]->naziv) + 1) - 20) );
-                    procesAxisLabel->setFont(font);
-                    procesAxisLabel->setDefaultTextColor(Qt::blue);
-                    scene->addItem(procesAxisLabel);
-                }
-
-        }
-
-// IMPORTANT DONT FORGET
+this->drawProcesVector();
+// /////////////////////////
 procesVector.clear();
 // /////////////////////////
     }else if( algoritam == "RR" ) {
@@ -521,6 +509,7 @@ procesVector.clear();
         qDebug() << "Original: " << lengthOfAllProcesses;
         qDebug() << "Check: " << checkProcesLength;
         executionQueue.clear();
+
         //Drawing
         this->drawProcesVector();
         procesVector.clear();
