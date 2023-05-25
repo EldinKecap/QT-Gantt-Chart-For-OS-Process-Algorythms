@@ -20,7 +20,7 @@ Dialog::Dialog(QWidget *parent) :
 
     this->putSpinBoxesIntoArrays();
     this->drawAxis();
-
+    ui->horizontalSlider->setEnabled(false);
 //    QGraphicsRectItem * rect = new QGraphicsRectItem(0,0,40,300);
 //    rect->setPos(5,50);
 //    scene->addItem(rect);
@@ -43,7 +43,7 @@ void Dialog::disableSpinBoxesBasedOnSelectedAmount(int numOfProcesses)
         }
     }
 
-    for(int i = numOfProcesses ; i < 7; i++ ){
+    for(int i = numOfProcesses ; i < 9; i++ ){
         brojCiklusaSpinBoxes[i]->setEnabled(false);
         dolazakSpinBoxes[i]->setEnabled(false);
         brojCiklusaSpinBoxes[i]->setValue(0);
@@ -368,7 +368,7 @@ procesVector.clear();
 
         printProcesVector();
 
-        int quantum = 2;
+        int quantum = ui->horizontalSlider->value();
         for(int i = 0; i < procesVector.size(); i++){
             if(procesVector[i]->brojCiklusa > quantum){
                 procesVector[i]->brojCiklusa -= quantum;
@@ -582,7 +582,7 @@ void Dialog::on_algoritam_activated(const QString &arg1)
     if(arg1 == "Prioritet"){
         disableSpinBoxesBasedOnSelectedAmount(ui->brojProcesa->currentText().toInt());
     }else if(arg1 != "Prioritet"){
-        for(int i = 0; i < 7 ; i++){
+        for(int i = 0; i < 9 ; i++){
             prioritetSpinBoxes[i]->setEnabled(false);
             prioritetSpinBoxes[i]->setValue(0);
         }
@@ -590,10 +590,13 @@ void Dialog::on_algoritam_activated(const QString &arg1)
     if( arg1 == "RR"){
         ui->radioButton->setChecked(true);
         ui->radioButton->setEnabled(false);
+        ui->horizontalSlider->setEnabled(true);
     } else if( arg1 != "RR"){
         ui->radioButton->setChecked(false);
         ui->radioButton->setEnabled(true);
-}
+        ui->horizontalSlider->setEnabled(false);
+        ui->horizontalSlider->setValue(1);
+    }
 }
 
 void Dialog::putSpinBoxesIntoArrays()
@@ -605,6 +608,8 @@ void Dialog::putSpinBoxesIntoArrays()
     prioritetSpinBoxes[4] = ui->prioritetP5;
     prioritetSpinBoxes[5] = ui->prioritetP6;
     prioritetSpinBoxes[6] = ui->prioritetP7;
+    prioritetSpinBoxes[7] = ui->prioritetP8;
+    prioritetSpinBoxes[8] = ui->prioritetP9;
 
     brojCiklusaSpinBoxes[0] = ui->brojCiklusaP1;
     brojCiklusaSpinBoxes[1] = ui->brojCiklusaP2;
@@ -613,6 +618,8 @@ void Dialog::putSpinBoxesIntoArrays()
     brojCiklusaSpinBoxes[4] = ui->brojCiklusaP5;
     brojCiklusaSpinBoxes[5] = ui->brojCiklusaP6;
     brojCiklusaSpinBoxes[6] = ui->brojCiklusaP7;
+    brojCiklusaSpinBoxes[7] = ui->brojCiklusaP8;
+    brojCiklusaSpinBoxes[8] = ui->brojCiklusaP9;
 
     dolazakSpinBoxes[0] = ui->dolazakP1;
     dolazakSpinBoxes[1] = ui->dolazakP2;
@@ -621,6 +628,8 @@ void Dialog::putSpinBoxesIntoArrays()
     dolazakSpinBoxes[4] = ui->dolazakP5;
     dolazakSpinBoxes[5] = ui->dolazakP6;
     dolazakSpinBoxes[6] = ui->dolazakP7;
+    dolazakSpinBoxes[7] = ui->dolazakP8;
+    dolazakSpinBoxes[8] = ui->dolazakP9;
 }
 
 void Dialog::drawAxis()
@@ -764,5 +773,8 @@ void Dialog::drawProcesVector()
     }
 }
 
-
-
+void Dialog::on_horizontalSlider_valueChanged(int value)
+{
+    qDebug() << value;
+    ui->quantumValue->setText(QString::number(value));
+}

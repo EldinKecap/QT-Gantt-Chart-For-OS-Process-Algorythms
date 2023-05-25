@@ -32,16 +32,18 @@ private slots:
 
     void on_algoritam_activated(const QString &arg1);
 
+    void on_horizontalSlider_valueChanged(int value);
+
 private:
     Ui::Dialog *ui;
     QGraphicsScene *scene;
     QGraphicsRectItem *rect;
 
-    QSpinBox* prioritetSpinBoxes[7];
-    QSpinBox* brojCiklusaSpinBoxes[7];
-    QSpinBox* dolazakSpinBoxes[7];
+    QSpinBox* prioritetSpinBoxes[9];
+    QSpinBox* brojCiklusaSpinBoxes[9];
+    QSpinBox* dolazakSpinBoxes[9];
 
-    Proces* procesArray[7];
+//    Proces* procesArray[9];
     QVector <Proces*> procesVector;
     void putSpinBoxesIntoArrays();
     void drawAxis();

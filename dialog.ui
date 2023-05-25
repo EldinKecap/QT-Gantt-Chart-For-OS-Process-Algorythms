@@ -16,6 +16,12 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
   <property name="maximumSize">
    <size>
     <width>800</width>
@@ -28,9 +34,9 @@
   <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>230</x>
      <y>10</y>
-     <width>425</width>
+     <width>551</width>
      <height>101</height>
     </rect>
    </property>
@@ -38,6 +44,39 @@
     <property name="horizontalSpacing">
      <number>6</number>
     </property>
+    <item row="2" column="9">
+     <widget class="QSpinBox" name="brojCiklusaP9">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="9">
+     <widget class="QSpinBox" name="dolazakP9">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="9">
+     <widget class="QSpinBox" name="prioritetP9">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="7">
      <widget class="QLabel" name="label_7">
       <property name="text">
@@ -45,6 +84,49 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="8">
+     <widget class="QLabel" name="label_14">
+      <property name="text">
+       <string>P8</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>P2</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>P3</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="5">
+     <widget class="QSpinBox" name="brojCiklusaP5">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
       </property>
      </widget>
     </item>
@@ -65,33 +147,10 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="2">
-     <widget class="QLabel" name="label_2">
+    <item row="0" column="5">
+     <widget class="QLabel" name="label_5">
       <property name="text">
-       <string>P2</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="5">
-     <widget class="QSpinBox" name="brojCiklusaP5">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>30</number>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="3">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>P3</string>
+       <string>P5</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -108,108 +167,8 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="5">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>P5</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="3">
-     <widget class="QSpinBox" name="prioritetP3">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="maximum">
-       <number>9</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="2">
-     <widget class="QSpinBox" name="prioritetP2">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="maximum">
-       <number>9</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QSpinBox" name="prioritetP1">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="maximum">
-       <number>9</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="7">
-     <widget class="QSpinBox" name="prioritetP7">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="maximum">
-       <number>9</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="5">
-     <widget class="QSpinBox" name="prioritetP5">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="maximum">
-       <number>9</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="6">
-     <widget class="QSpinBox" name="prioritetP6">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="maximum">
-       <number>9</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="4">
-     <widget class="QSpinBox" name="prioritetP4">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="maximum">
-       <number>9</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_10">
-      <property name="text">
-       <string>Prioritet</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_8">
-      <property name="text">
-       <string>Dolazak u sistem u ciklusu</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3">
-     <widget class="QSpinBox" name="brojCiklusaP3">
+    <item row="2" column="2">
+     <widget class="QSpinBox" name="brojCiklusaP2">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -231,8 +190,18 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="2">
-     <widget class="QSpinBox" name="brojCiklusaP2">
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>Prioritet</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QSpinBox" name="brojCiklusaP3">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -287,13 +256,16 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="5">
-     <widget class="QSpinBox" name="dolazakP5">
+    <item row="2" column="4">
+     <widget class="QSpinBox" name="brojCiklusaP4">
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
       <property name="maximum">
-       <number>20</number>
+       <number>30</number>
       </property>
      </widget>
     </item>
@@ -317,6 +289,16 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="5">
+     <widget class="QSpinBox" name="dolazakP5">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="1">
      <widget class="QLabel" name="label">
       <property name="text">
@@ -327,16 +309,13 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="4">
-     <widget class="QSpinBox" name="brojCiklusaP4">
-      <property name="enabled">
-       <bool>false</bool>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Broj ciklusa trajanja</string>
       </property>
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>30</number>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -353,10 +332,123 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_9">
+    <item row="3" column="7">
+     <widget class="QSpinBox" name="prioritetP7">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="6">
+     <widget class="QSpinBox" name="prioritetP6">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="5">
+     <widget class="QSpinBox" name="prioritetP5">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="4">
+     <widget class="QSpinBox" name="prioritetP4">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QSpinBox" name="prioritetP2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="3">
+     <widget class="QSpinBox" name="prioritetP3">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="9">
+     <widget class="QLabel" name="label_15">
       <property name="text">
-       <string>Broj ciklusa trajanja</string>
+       <string>P9</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QSpinBox" name="prioritetP1">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="8">
+     <widget class="QSpinBox" name="dolazakP8">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="8">
+     <widget class="QSpinBox" name="brojCiklusaP8">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="8">
+     <widget class="QSpinBox" name="prioritetP8">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="maximum">
+       <number>9</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Dolazak u sistem u ciklusu</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -393,7 +485,7 @@
     <rect>
      <x>20</x>
      <y>10</y>
-     <width>311</width>
+     <width>201</width>
      <height>101</height>
     </rect>
    </property>
@@ -452,6 +544,16 @@
         <string>7</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>8</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>9</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item row="0" column="1">
@@ -500,21 +602,47 @@
     </item>
    </layout>
   </widget>
-  <widget class="QSlider" name="horizontalSlider">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
+  <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>570</y>
+     <y>559</y>
      <width>761</width>
-     <height>22</height>
+     <height>41</height>
     </rect>
    </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="label_16">
+      <property name="text">
+       <string>Quantum value:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="quantumValue">
+      <property name="text">
+       <string>1</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="horizontalSlider">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>30</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
