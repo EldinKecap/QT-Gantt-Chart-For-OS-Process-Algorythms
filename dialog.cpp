@@ -102,7 +102,7 @@ void Dialog::on_pushButton_clicked()
         QVector <Proces *> executionQueue;
         QVector <Proces *> waitQueue;
         int executionTime = 0;
-        printProcesVector();
+//        printProcesVector();
         while(true){
 
             if(procesVector.size() > 0){
@@ -171,7 +171,7 @@ void Dialog::on_pushButton_clicked()
         }
 //    qDebug()<< "what";
 
-// /////////////////////////////////////////// REWRITING THIS //////////////////////////////
+// /////////////////////////////////////////// REWROTE THIS BUT KEEPING IT IN CASE REWRITE DOESNT WORK //////////////////////////////
         // splitting processes based on time of arrival
 //        for( int i = 0; i < brojProcesaInt ; i++ ){
 //            if(i+1 < brojProcesaInt){
@@ -187,13 +187,13 @@ void Dialog::on_pushButton_clicked()
 //        }
 // //////////////////////////////////////////////////////////////////////////////////
 //        qDebug() << "_______________ Sliced up array ___________";
-        printProcesVector();
-        int checkAllCiklusi = 0;
-        for(Proces* value : procesVector){
-           checkAllCiklusi += value->brojCiklusa;
-        }
-        qDebug() << "Length all:" << lengthOfAllProcesses;
-        qDebug() << "Check Length all:" << checkAllCiklusi;
+//        printProcesVector();
+//        int checkAllCiklusi = 0;
+//        for(Proces* value : procesVector){
+//           checkAllCiklusi += value->brojCiklusa;
+//        }
+//        qDebug() << "Length all:" << lengthOfAllProcesses;
+//        qDebug() << "Check Length all:" << checkAllCiklusi;
 
         this->drawProcesVector();
 
@@ -204,7 +204,7 @@ void Dialog::on_pushButton_clicked()
 
         std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
 
-        printProcesVector();
+//        printProcesVector();
 
         int executionTime = 0;
         int procesIsExecuting = 0;
@@ -259,7 +259,7 @@ void Dialog::on_pushButton_clicked()
 
         this ->fillProcesVector();
         std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
-        printProcesVector();
+//        printProcesVector();
 
         int executionTime = 0;
         QVector <Proces*> executionQueue;
@@ -267,7 +267,7 @@ void Dialog::on_pushButton_clicked()
 //        bool procesIsExecuting = false;
 //        int procesStartedExecutingTime;
         bool firstProcesAdded = false;
-        qDebug()<<"SJF Preemptive";
+//        qDebug()<<"SJF Preemptive";
         while(true){
 
             if(procesVector.size() != 0){
@@ -321,7 +321,7 @@ void Dialog::on_pushButton_clicked()
                         waitingQueue[0]->brojCiklusa--;
                     }
                 }else{
-                    qDebug()<<"not Redundant";
+//                    qDebug()<<"not Redundant";
                     executionQueue.push_back(new Proces(waitingQueue[0]->naziv, 0, waitingQueue[0]->dolazakUCiklus));
                     executionQueue[executionQueue.size() - 1]->procesStartedExecuting = executionTime;
                     executionQueue[executionQueue.size() - 1]->dolazakUCiklus = executionTime;
@@ -342,7 +342,7 @@ void Dialog::on_pushButton_clicked()
                        }
 
             executionTime++;
-            qDebug()<< "Vrijeme Izvrsavanja: "<<executionTime;
+//            qDebug()<< "Vrijeme Izvrsavanja: "<<executionTime;
         }
 
 
@@ -366,7 +366,7 @@ procesVector.clear();
 
         std::sort(procesVector.begin(), procesVector.end(), compareDolazak);
 
-        printProcesVector();
+//        printProcesVector();
 
         int quantum = ui->horizontalSlider->value();
         for(int i = 0; i < procesVector.size(); i++){
@@ -415,21 +415,21 @@ procesVector.clear();
                             highestPriority = proces->prioritet;
                         }
                     }
-                    qDebug()<<highestPriority<<"/highest Priority";
+//                    qDebug()<<highestPriority<<"/highest Priority";
                     for(Proces* proces: contendersForQueue){
                         if(proces->prioritet == highestPriority){
                             contendersWithHighestPriority.push_back(proces);
                         }
                     }
 
-                    printVector(contendersWithHighestPriority);
+//                    printVector(contendersWithHighestPriority);
                     if(contendersWithHighestPriority.size() > 0){
                         executionQueue.push_back(contendersWithHighestPriority[0]);
-                        qDebug()<<procesVector.indexOf(contendersWithHighestPriority[0]) << "index high";
+//                        qDebug()<<procesVector.indexOf(contendersWithHighestPriority[0]) << "index high";
                         procesVector.remove(procesVector.indexOf(contendersWithHighestPriority[0]));
                     }else {
                         executionQueue.push_back(contendersForQueue[contendersForQueue.size() - 1]);
-                        qDebug()<<procesVector.indexOf(contendersForQueue[contendersForQueue.size() - 1]) << "index not high";
+//                        qDebug()<<procesVector.indexOf(contendersForQueue[contendersForQueue.size() - 1]) << "index not high";
                         procesVector.remove(procesVector.indexOf(contendersForQueue[contendersForQueue.size() - 1]));
                     }
 
@@ -522,7 +522,7 @@ procesVector.clear();
                         executionQueue[executionQueue.size()-1]->procesStartedExecuting = executionTime;
                         readyQueue.remove(0);
                     }
-                    qDebug() << "Remaining broj ciklusa: " << remainingBrojCiklusa;
+//                    qDebug() << "Remaining broj ciklusa: " << remainingBrojCiklusa;
                 }
 
 
@@ -534,18 +534,18 @@ procesVector.clear();
             }
 
             executionTime++;
-            qDebug() << "Proces Vector size: " << procesVector.size();
-            qDebug() << "Wait Vector size: " << waitQueue.size();
-            qDebug() << "Ready Vector size: " << readyQueue.size();
-            qDebug() << "Vrijeme izvrsavanja: " << executionTime;
+//            qDebug() << "Proces Vector size: " << procesVector.size();
+//            qDebug() << "Wait Vector size: " << waitQueue.size();
+//            qDebug() << "Ready Vector size: " << readyQueue.size();
+//            qDebug() << "Vrijeme izvrsavanja: " << executionTime;
         }
-        printVector(executionQueue);
+//        printVector(executionQueue);
         int checkProcesLength = 0;
         for(Proces * proces : executionQueue){
             checkProcesLength += proces->brojCiklusa ;
         }
-        qDebug() << "Original: " << lengthOfAllProcesses;
-        qDebug() << "Check: " << checkProcesLength;
+//        qDebug() << "Original: " << lengthOfAllProcesses;
+//        qDebug() << "Check: " << checkProcesLength;
         executionQueue.clear();
 
         //Drawing
@@ -740,7 +740,7 @@ void Dialog::drawProcesVector()
 //        qDebug()<<procesVector[i]->naziv << procesVector[i]->rectSpacingHeight;
     }
 
-//qDebug()<< "yo";
+
     for(Proces* proces: procesVector){
         QPen pen(Qt::blue);
         QBrush brush(Qt::green);
@@ -757,7 +757,7 @@ void Dialog::drawProcesVector()
         endLine->setPen(dashedLine);
         scene->addItem(endLine);
     }
-//    qDebug()<< "yo";
+
 
     for(int i = 0; i < procesVector.size(); i++ ){
             if(listOfProcesNaziva.indexOf(procesVector[i]->naziv) == -1){
@@ -775,6 +775,6 @@ void Dialog::drawProcesVector()
 
 void Dialog::on_horizontalSlider_valueChanged(int value)
 {
-    qDebug() << value;
+//    qDebug() << value;
     ui->quantumValue->setText(QString::number(value));
 }
